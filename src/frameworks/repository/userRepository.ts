@@ -1,6 +1,6 @@
 import Course from "../../domain_entities/course";
 import User from "../../domain_entities/user";
-import IuserRepository from "../../useCase/interface/iuserRepository";
+import IuserRepository from "../../useCase/interface/IuserRepository";
 import { courseModel } from "../database/courseModel";
 import { enrolledStudentsModel } from "../database/enrolledStudentsModel";
 import { orderModel } from "../database/orderModel";

@@ -1,7 +1,7 @@
 import Admin from "../domain_entities/admin";
 import IadminRepository from "./interface/IadminRepository";
 import JwtToken from "../frameworks/services/JwtToken";
-import HashPassword from "../frameworks/services/hashPassword";
+import HashPassword from "../frameworks/services/HashPassword";
 
 
 

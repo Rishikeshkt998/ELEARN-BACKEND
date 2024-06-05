@@ -7,7 +7,7 @@ import {trainerModel} from "../database/trainerModel"
 import { categoryModel } from "../database/categoryModel";
 import chapterModel from "../database/chapterModel";
 import Course from "../../domain_entities/course";
-import Chapter from "../../domain_entities/Chapters";
+import Chapter from "../../domain_entities/chapters";
 import { Types } from 'mongoose';
 import Trainer from "../../domain_entities/trainer";
 import Question from "../../domain_entities/question";

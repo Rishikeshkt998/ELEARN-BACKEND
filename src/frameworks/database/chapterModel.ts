@@ -1,5 +1,5 @@
 import { Schema, model } from "mongoose";
-import Chapter from "../../domain_entities/Chapters";
+import Chapter from "../../domain_entities/chapters";
 const ChapterSchema = new Schema<Chapter>({
     chapters: [{
         title: {

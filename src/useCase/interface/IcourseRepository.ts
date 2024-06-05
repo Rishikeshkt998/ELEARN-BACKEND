@@ -1,4 +1,4 @@
-import Chapter from "../../domain_entities/Chapters"
+import Chapter from "../../domain_entities/chapters"
 import Category from "../../domain_entities/category"
 import Course from "../../domain_entities/course"
 import Question from "../../domain_entities/question"

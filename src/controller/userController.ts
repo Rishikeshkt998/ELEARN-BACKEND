@@ -3,7 +3,7 @@ import UserUseCase from "../useCase/UserUseCase";
 import JWT from '../frameworks/services/JwtToken'
 import Multer from 'multer'
 import { ParsedQs } from "qs";
-import { paymentCheckOut } from "../frameworks/services/Stripe";
+// import { paymentCheckOut } from "../frameworks/services/Stripe";
 import stripeValue from "stripe"
 import {
     HTTP_STATUS_OK,
@@ -327,16 +327,16 @@ class userController {
         })
 
     }
-    async checkoutSession(req: Request, res: Response) {
-        try {
+    // async checkoutSession(req: Request, res: Response) {
+    //     try {
 
 
-            let sessionId = await paymentCheckOut(req.body);
-            res.status(200).json(sessionId);
-        } catch (error) {
-            console.log(error);
-        }
-    }
+    //         let sessionId = await paymentCheckOut(req.body);
+    //         res.status(200).json(sessionId);
+    //     } catch (error) {
+    //         console.log(error);
+    //     }
+    // }
     async sendStripePublishableKey(req: Request, res: Response) {
         res.status(200).json({
             publishablekey: process.env.STRIPE_PUBLISHABLE_KEY

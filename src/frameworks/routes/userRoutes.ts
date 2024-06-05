@@ -2,7 +2,7 @@ import express from "express"
 import userController from "../../controller/userController"
 import UserUseCase from "../../useCase/UserUseCase"
 import JwtToken from "../services/JwtToken"
-import HashPassword from "../services/hashPassword"
+import HashPassword from "../services/HashPassword"
 import GenerateOtp from "../services/GenerateOtp"
 import sendMail from "../services/SendMail"
 import Cloudinary from "../services/Cloudinary"
@@ -50,7 +50,7 @@ router.put('/emailchange/:id', userAuth,  (req, res) => controller.changEmail(re
 router.post('/verifyEmail', userAuth, (req, res) => controller.ChangeEmailVerification(req,res))
 router.get('/getcourse/:id',(req, res) => controller.getUserCousrse(req,res))
 router.get('/courseAccess/:id', CourseAccessAuth, (req, res) => controller.getUserCourseAccess(req, res))
-router.post('/checkoutpage', userAuth, (req, res) => controller.checkoutSession(req,res))
+// router.post('/checkoutpage', userAuth, (req, res) => controller.checkoutSession(req,res))
 router.get('/getpayment', userAuth, (req, res) => controller.sendStripePublishableKey(req,res))
 router.get('/getvideocallkey', CourseAccessAuth, (req, res) => controller.SendVideoCallKey(req, res))
 router.post('/payment', userAuth, (req, res) => controller.newPayment(req, res))
