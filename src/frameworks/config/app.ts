@@ -21,7 +21,7 @@ export const createServer=()=>{
         app.use(
             cors({
                 // origin: 'http://localhost:3000',
-                origin: process.env.ORIGIN,
+                origin: process.env.ORIGIN || "*" ,
                 methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
                 credentials: true
             })
