@@ -64,7 +64,7 @@ router.get('/userbyid/:id',userAuth, (req, res) => controller.Userview(req, res)
 router.post('/logout', (req, res) => controller.logout(req, res))
 //course
 
-router.get('/category', userAuth, (req, res) => CourseController.Categoryshow(req, res))
+router.get('/category',  (req, res) => CourseController.Categoryshow(req, res))
 router.get('/course', (req, res) => CourseController.Courseshow(req, res))
 router.get('/getcourse/:courseId', CourseAccessAuth, (req, res) => CourseController.EditDisplayCoursebyId(req, res))
 router.get('/getchapters/:courseId', CourseAccessAuth, (req, res) => CourseController.DisplayChapters(req, res))
