@@ -61,7 +61,7 @@ router.get('/enrolledview/:id', userAuth, (req, res) => controller.EnrolledCours
 router.post('/completedlesson', userAuth, (req, res) => controller.LessonCompletion(req, res))
 router.post('/completedchapter', userAuth,(req, res) => controller.ChapterCompletion(req, res))
 router.get('/userbyid/:id',userAuth, (req, res) => controller.Userview(req, res))
-router.post('/logout', (req, res) => controller.logout(req, res))
+router.post('/logout',(req, res) => controller.logout(req, res))
 //course
 
 router.get('/category',  (req, res) => CourseController.Categoryshow(req, res))
