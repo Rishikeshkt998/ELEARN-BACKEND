@@ -61,8 +61,7 @@ class userController {
                 res.cookie('userToken', user.token, {
                     expires: new Date(Date.now() + 300000),
                     httpOnly: true,
-                })
-                res.cookie('refreshToken', user.Refreshtoken, {
+                }).cookie('refreshToken', user.Refreshtoken, {
                     expires: new Date(Date.now() + 25892000000),
                     httpOnly: true,
                 })
