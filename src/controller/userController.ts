@@ -60,11 +60,11 @@ class userController {
             if (user?.success) {
                 res.cookie('userToken', user.token, {
                     expires: new Date(Date.now() + 300000),
-                    sameSite: "lax",
+                    sameSite: "none",
                     secure: true
                 }).cookie('refreshToken', user.Refreshtoken, {
                     expires: new Date(Date.now() + 25892000000),
-                    sameSite: "lax",
+                    sameSite: "none",
                     secure: true
                 })
 
