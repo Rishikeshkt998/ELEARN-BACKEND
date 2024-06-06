@@ -60,12 +60,12 @@ class userController {
             if (user?.success) {
                 res.cookie('userToken', user.token, {
                     expires: new Date(Date.now() + 300000),
-                    sameSite: "none",
+                    sameSite: "lax",
                     secure: true
                 }).cookie('refreshToken', user.Refreshtoken, {
                     expires: new Date(Date.now() + 25892000000),
-                    sameSite:"none",
-                    secure:true
+                    sameSite: "lax",
+                    secure: true
                 })
 
                 return res.status(200).json(user);
@@ -123,7 +123,7 @@ class userController {
         try {
             const { email, name } = req.body
             const googleSigned = await this.userCase.googleSignin(email, name)
-            console.log("goo",googleSigned)
+            console.log("goo", googleSigned)
             if (googleSigned?.success) {
                 res.cookie('userToken', googleSigned.token, {
                     expires: new Date(Date.now() + 300000),

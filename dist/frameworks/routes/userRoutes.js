@@ -45,7 +45,7 @@ router.post('/verifyforgotpassword', (req, res) => controller.verifyForgotOtp(re
 router.post('/changedpassword', (req, res) => controller.changedPasword(req, res));
 router.post('/google', (req, res) => controller.googleSignin(req, res));
 router.get('/profile/:userId', userAuth_1.default, (req, res) => controller.profilePage(req, res));
-router.get('/profileedit/:userId', (req, res) => controller.editProfile(req, res));
+router.get('/profileedit/:userId', userAuth_1.default, (req, res) => controller.editProfile(req, res));
 router.put('/updateprofile/:userId', userAuth_1.default, (req, res) => controller.updateProfile(req, res));
 router.put('/updatepassword/:userId', userAuth_1.default, (req, res) => controller.changePassword(req, res));
 router.put('/uploadprofilepic/:id', userAuth_1.default, multer_1.uploadFile.single('image'), (req, res) => controller.uploadProfilepic(req, res));
@@ -66,7 +66,7 @@ router.post('/completedchapter', userAuth_1.default, (req, res) => controller.Ch
 router.get('/userbyid/:id', userAuth_1.default, (req, res) => controller.Userview(req, res));
 router.post('/logout', (req, res) => controller.logout(req, res));
 //course
-router.get('/category', userAuth_1.default, (req, res) => CourseController.Categoryshow(req, res));
+router.get('/category', (req, res) => CourseController.Categoryshow(req, res));
 router.get('/course', (req, res) => CourseController.Courseshow(req, res));
 router.get('/getcourse/:courseId', CourseAccessAuth_1.default, (req, res) => CourseController.EditDisplayCoursebyId(req, res));
 router.get('/getchapters/:courseId', CourseAccessAuth_1.default, (req, res) => CourseController.DisplayChapters(req, res));
