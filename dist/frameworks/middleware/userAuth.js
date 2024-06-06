@@ -20,8 +20,13 @@ const jwt = new JwtToken_1.default();
 dotenv_1.default.config();
 dotenv_1.default.config();
 const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
+    var _a;
+    const RefreshToken = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    console.log("authorization", RefreshToken);
+    // const refreshToken = req.headers.refreshtoken
+    // console.log("refresh",refreshToken)
     let token = req.cookies.userToken;
-    let RefreshToken = req.cookies.refreshToken;
+    // let RefreshToken = req.cookies.refreshToken;
     if (!RefreshToken) {
         return res.json({ success: false, message: 'Token expired or not available' });
     }

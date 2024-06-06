@@ -58,17 +58,11 @@ class userController {
             const { email, password } = req.body;
             const user = await this.userCase.LoginUser(email, password);
             if (user?.success) {
-                res.cookie('userToken', user.token, {
-                    expires: new Date(Date.now() + 300000),
+                res.cookie('userToken', user.Refreshtoken, {
+                    // expires: new Date(Date.now() + 300000),
                     sameSite: "none",
                     secure: true
-                }).cookie('refreshToken', user.Refreshtoken, {
-                    expires: new Date(Date.now() + 25892000000),
-                    sameSite: "none",
-                    secure: true
-                })
-
-                return res.status(200).json(user);
+                }).status(200).json(user);
             } else if (!user?.success) {
                 return res.status(200).json({ success: false, message: user?.message });
             }
@@ -291,7 +285,8 @@ class userController {
             if (!courseIdCookie) {
                 const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
                 res.cookie('courseId', id, {
-                    maxAge: oneDayInMilliseconds, sameSite: "none",
+                    maxAge: oneDayInMilliseconds, 
+                    sameSite: "none",
                     secure: true
                 });
             }

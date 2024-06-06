@@ -18,8 +18,12 @@ declare global {
 }
 
 const userAuth = async (req: Request, res: Response, next: NextFunction) => {
+    const RefreshToken = req.headers.authorization?.split(" ")[1] as string;
+    console.log("authorization", RefreshToken)
+    // const refreshToken = req.headers.refreshtoken
+    // console.log("refresh",refreshToken)
     let token = req.cookies.userToken;
-    let RefreshToken = req.cookies.refreshToken;
+    // let RefreshToken = req.cookies.refreshToken;
     if (!RefreshToken) {
         return res.json({ success: false, message: 'Token expired or not available' });
     }

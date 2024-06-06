@@ -26,7 +26,9 @@ const jwt = new JwtToken_1.default();
 dotenv_1.default.config();
 dotenv_1.default.config();
 const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    let token = req.cookies.adminToken;
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    // let token = req.cookies.adminToken;
     console.log("token", token);
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });

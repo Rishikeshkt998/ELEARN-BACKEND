@@ -23,6 +23,7 @@ class JwtToken implements IjwtToken {
     async refreshToken(userId: string, role: string): Promise<string> {
         const jwtToken = process.env.JWT_REFRESH_SECRET_KEY
         if (jwtToken) {
+           
             const token: string = jwt.sign({ id: userId, role: role }, jwtToken)
             return token
         }

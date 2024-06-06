@@ -59,7 +59,8 @@ declare global {
 }
 
 const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
-    let token = req.cookies.adminToken;
+    const token = req.headers.authorization?.split(" ")[1] as string;
+    // let token = req.cookies.adminToken;
     console.log("token", token)
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
