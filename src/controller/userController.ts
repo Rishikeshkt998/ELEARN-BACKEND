@@ -127,11 +127,13 @@ class userController {
             if (googleSigned?.success) {
                 res.cookie('userToken', googleSigned.token, {
                     expires: new Date(Date.now() + 300000),
-                    httpOnly: true,
+                    sameSite: "none",
+                    secure: true,
                 })
                 res.cookie('refreshToken', googleSigned.Refreshtoken, {
                     expires: new Date(Date.now() + 25892000000),
-                    httpOnly: true,
+                    sameSite: "none",
+                    secure: true
                 })
                 return res.status(200).json(googleSigned);
             } else if (!googleSigned?.success) {
@@ -288,7 +290,10 @@ class userController {
             const courseIdCookie = req.cookies.courseId;
             if (!courseIdCookie) {
                 const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-                res.cookie('courseId', id, { maxAge: oneDayInMilliseconds, httpOnly: true });
+                res.cookie('courseId', id, {
+                    maxAge: oneDayInMilliseconds, sameSite: "none",
+                    secure: true
+                });
             }
             const Response = await this.userCase.getUserCourse(id)
             if (Response) {
