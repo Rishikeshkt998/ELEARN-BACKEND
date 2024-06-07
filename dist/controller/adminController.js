@@ -32,7 +32,6 @@ class adminController {
                 const adminData = yield this.adminCase.LoginAdmin(email, password);
                 if (adminData === null || adminData === void 0 ? void 0 : adminData.success) {
                     res.cookie('adminToken', adminData.token, {
-                        expires: new Date(Date.now() + 25892000000),
                         sameSite: "lax",
                         secure: true
                     }).status(200).json(adminData);
