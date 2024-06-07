@@ -3,8 +3,6 @@ import Question from "../domain_entities/question";
 import Cloudinary from "../frameworks/services/Cloudinary";
 import IcourseRepository from "./interface/IcourseRepository";
 
-
-
 class courseUseCase {
     private IcourseRepository: IcourseRepository
     private Cloudinary: Cloudinary
