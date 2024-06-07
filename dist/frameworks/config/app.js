@@ -21,14 +21,31 @@ const createServer = () => {
         app.use(express_1.default.urlencoded({ extended: true }));
         app.use(body_parser_1.default.json({ limit: '10mb' }));
         app.use((0, cookie_parser_1.default)());
-        app.use((0, cors_1.default)({
-            // origin: 'http://localhost:3000',
+        const corsOptions = {
             origin: process.env.ORIGIN || "*",
-            methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
             credentials: true,
+            methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
             allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization",
             optionsSuccessStatus: 200,
-        }));
+        };
+        app.use((0, cors_1.default)(corsOptions));
+        app.use((req, res, next) => {
+            res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN || "*");
+            res.setHeader("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept, Authorization");
+            res.setHeader("Access-Control-Allow-Methods", "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS");
+            res.setHeader("Access-Control-Allow-Credentials", "true");
+            next();
+        });
+        // app.use(
+        //     cors({
+        //         // origin: 'http://localhost:3000',
+        //         origin: process.env.ORIGIN || "*" ,
+        //         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+        //         credentials: true,
+        //         allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization",
+        //         optionsSuccessStatus: 200,
+        //     })
+        // )
         app.use('/api/user', userRoutes_1.default);
         app.use('/api/admin', adminRouter_1.default);
         app.use('/api/trainer', TrainerRouter_1.default);
