@@ -26,7 +26,7 @@ class JwtToken {
     }
     VerifyJwt(token) {
         return __awaiter(this, void 0, void 0, function* () {
-            const jwtToken = process.env.JWt_SECRET_KEY;
+            const jwtToken = process.env.JWT_SECRET_KEY;
             const verified = jsonwebtoken_1.default.verify(token, jwtToken);
             return verified;
         });

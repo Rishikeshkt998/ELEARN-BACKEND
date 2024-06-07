@@ -21,7 +21,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const JwtToken_1 = __importDefault(require("../services/JwtToken"));
 const adminRepository_1 = __importDefault(require("../repository/adminRepository"));
-const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
+// import jwt, { JwtPayload } from 'jsonwebtoken'
 const repository = new adminRepository_1.default();
 const Jwt = new JwtToken_1.default();
 dotenv_1.default.config();
@@ -34,10 +34,10 @@ const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });
     }
     try {
-        const jwtToken = process.env.JWt_SECRET_KEY;
-        console.log("jwt token", jwtToken);
-        const decoded = jsonwebtoken_1.default.verify(token, jwtToken);
-        // await jwt.VerifyJwt(token)
+        // const jwtToken = process.env.JWT_SECRET_KEY as string
+        // console.log("jwt token",jwtToken)
+        // const decoded = jwt.verify(token, jwtToken) as JwtPayload
+        const decoded = yield Jwt.VerifyJwt(token);
         if (decoded && decoded.role != 'admin') {
             return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
         }
