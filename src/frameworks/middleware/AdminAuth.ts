@@ -68,6 +68,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
     }
     try {
         const jwtToken = process.env.JWt_SECRET_KEY as string
+        console.log("jwt token",jwtToken)
         const decoded = jwt.verify(token, jwtToken) as JwtPayload
         // await jwt.VerifyJwt(token)
         if (decoded && decoded.role != 'admin') {
