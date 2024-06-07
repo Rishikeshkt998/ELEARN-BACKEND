@@ -36,8 +36,8 @@ class adminController {
                         secure: true
                     }).status(200).json(adminData);
                 }
-                else {
-                    return res.status(200).json(adminData);
+                else if (!(adminData === null || adminData === void 0 ? void 0 : adminData.success)) {
+                    return res.status(200).json({ success: false, message: adminData === null || adminData === void 0 ? void 0 : adminData.message });
                 }
             }
             catch (error) {

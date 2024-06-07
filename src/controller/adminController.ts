@@ -24,8 +24,8 @@ class adminController {
                     sameSite: "none",
                     secure: true
                 }).status(200).json( adminData )
-            } else {
-                return res.status(200).json(adminData)
+            } else if (!adminData?.success) {
+                return res.status(200).json({ success: false, message: adminData?.message });
             }
         } catch (error) {
             console.log(error);
