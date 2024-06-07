@@ -21,13 +21,13 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const dotenv_1 = __importDefault(require("dotenv"));
 const JwtToken_1 = __importDefault(require("../services/JwtToken"));
 const adminRepository_1 = __importDefault(require("../repository/adminRepository"));
-// import jwt, { JwtPayload } from 'jsonwebtoken'
 const repository = new adminRepository_1.default();
 const Jwt = new JwtToken_1.default();
 dotenv_1.default.config();
 const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
-    // const token = req.headers.authorization?.split(" ")[1] as string;
-    let token = req.cookies.adminToken;
+    var _a;
+    const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
+    // let token = req.cookies.adminToken;
     console.log("token", token);
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });

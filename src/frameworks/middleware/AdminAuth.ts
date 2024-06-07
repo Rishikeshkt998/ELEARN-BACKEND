@@ -44,7 +44,6 @@ import { Request, Response, NextFunction } from 'express'
 import dotenv from 'dotenv';
 import JwtToken from '../services/JwtToken';
 import adminRepository from '../repository/adminRepository';
-// import jwt, { JwtPayload } from 'jsonwebtoken'
 const repository = new adminRepository();
 const Jwt = new JwtToken();
 dotenv.config()
@@ -58,8 +57,8 @@ declare global {
 }
 
 const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
-    // const token = req.headers.authorization?.split(" ")[1] as string;
-    let token = req.cookies.adminToken;
+    const token = req.headers.authorization?.split(" ")[1] as string;
+    // let token = req.cookies.adminToken;
     console.log("token", token)
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
