@@ -23,7 +23,9 @@ export const createServer=()=>{
                 // origin: 'http://localhost:3000',
                 origin: process.env.ORIGIN || "*" ,
                 methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-                credentials: true
+                credentials: true,
+                allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization",
+                optionsSuccessStatus: 200,
             })
         )
         app.use('/api/user',userRouter)
