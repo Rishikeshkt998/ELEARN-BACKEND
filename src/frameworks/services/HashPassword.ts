@@ -17,4 +17,5 @@ class HashPassword implements IhashPassword{
 
 }
 
+
 export default HashPassword

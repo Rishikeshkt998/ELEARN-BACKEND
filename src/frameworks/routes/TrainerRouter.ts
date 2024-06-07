@@ -76,7 +76,7 @@ router.get('/chapter', (req, res) => CourseController.getChapter(req, res))
 //chat
 
 
-router.get('/getMessages/:conversationId', (req, res) => { ChatController.getMessages(req, res) });
+router.get('/getMessages/:conversationId',(req, res) => { ChatController.getMessages(req, res) });
 router.post('/newConversation', (req, res) => { ChatController.newConversation(req, res) });
 router.post('/newMessage', (req, res) => { ChatController.addMessage(req, res) });
 router.get('/getConversation/:userId/:tutorid', (req, res) => { ChatController.getConversation(req, res) });

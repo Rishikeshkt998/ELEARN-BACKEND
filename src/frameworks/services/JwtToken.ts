@@ -1,6 +1,5 @@
 import IjwtToken from '../../useCase/interface/IjwtToken'
 import jwt,{JwtPayload, Secret} from 'jsonwebtoken'
-import dotenv from "dotenv";
 
 class JwtToken implements IjwtToken {
 
