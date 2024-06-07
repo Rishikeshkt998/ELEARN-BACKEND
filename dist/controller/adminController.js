@@ -32,7 +32,7 @@ class adminController {
                 const adminData = yield this.adminCase.LoginAdmin(email, password);
                 if (adminData === null || adminData === void 0 ? void 0 : adminData.success) {
                     res.cookie('adminToken', adminData.token, {
-                        sameSite: "lax",
+                        sameSite: "none",
                         secure: true
                     }).status(200).json(adminData);
                 }

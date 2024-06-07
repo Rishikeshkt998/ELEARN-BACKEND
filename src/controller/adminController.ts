@@ -21,7 +21,7 @@ class adminController {
             const adminData = await this.adminCase.LoginAdmin(email, password);
             if (adminData?.success) {
                 res.cookie('adminToken', adminData.token, {
-                    sameSite: "lax",
+                    sameSite: "none",
                     secure: true
                 }).status(200).json( adminData )
             } else {
