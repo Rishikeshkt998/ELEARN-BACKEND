@@ -58,16 +58,14 @@ declare global {
 }
 
 const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
-    const token = req.headers.authorization?.split(" ")[1] as string;
-    // let token = req.cookies.adminToken;
+    // const token = req.headers.authorization?.split(" ")[1] as string;
+    let token = req.cookies.adminToken;
     console.log("token", token)
     if (!token) {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
     }
     try {
-        // const jwtToken = process.env.JWT_SECRET_KEY as string
-        // console.log("jwt token",jwtToken)
-        // const decoded = jwt.verify(token, jwtToken) as JwtPayload
+
         const decoded=await Jwt.VerifyJwt(token)
         if (decoded && decoded.role != 'admin') {
             return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
