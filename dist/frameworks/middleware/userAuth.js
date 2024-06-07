@@ -33,6 +33,7 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     if (!token) {
         try {
             const refreshToken = yield jwt.VerifyRefreshJwt(RefreshToken);
+            console.log("refresh token", refreshToken === null || refreshToken === void 0 ? void 0 : refreshToken.id);
             if (refreshToken) {
                 const newAccessToken = yield jwt.SignJwt(refreshToken.id, refreshToken.role);
                 res.cookie('userToken', newAccessToken, {

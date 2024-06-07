@@ -30,6 +30,7 @@ const userAuth = async (req: Request, res: Response, next: NextFunction) => {
     if (!token) {
         try {
             const refreshToken = await jwt.VerifyRefreshJwt(RefreshToken);
+            console.log("refresh token",refreshToken?.id)
 
             if (refreshToken) {
                 const newAccessToken = await jwt.SignJwt(refreshToken.id, refreshToken.role);

@@ -44,8 +44,9 @@ import { Request, Response, NextFunction } from 'express'
 import JwtToken from '../services/JwtToken';
 import dotenv from 'dotenv';
 import adminRepository from '../repository/adminRepository';
+import jwt, { JwtPayload } from 'jsonwebtoken'
 const repository = new adminRepository();
-const jwt = new JwtToken();
+const Jwt = new JwtToken();
 dotenv.config()
 
 dotenv.config()
@@ -66,7 +67,9 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
     }
     try {
-        const decoded = await jwt.VerifyJwt(token)
+        const jwtToken = process.env.JWt_SECRET_KEY as string
+        const decoded = jwt.verify(token, jwtToken) as JwtPayload
+        // await jwt.VerifyJwt(token)
         if (decoded && decoded.role != 'admin') {
             return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
         }
