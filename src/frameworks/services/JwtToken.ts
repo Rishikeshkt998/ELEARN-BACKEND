@@ -3,14 +3,27 @@ import jwt,{JwtPayload, Secret} from 'jsonwebtoken'
 
 class JwtToken implements IjwtToken {
 
-    async SignJwt(userId: string, role: string):Promise<string>{
+    async SignUserJwt(userId: string, role: string):Promise<string>{
         const jwtToken = process.env.JWT_SECRET_KEY as  Secret
         if(jwtToken){
-            const token: string = jwt.sign({ id: userId, role: role }, jwtToken)
+            const token: string = jwt.sign({ id: userId, role: role }, jwtToken, {
+                expiresIn: "5m",
+            })
             return token
         }
         throw new Error('jwt key is not found')
         
+    }
+    async SignJwt(userId: string, role: string): Promise<string> {
+        const jwtToken = process.env.JWT_SECRET_KEY as Secret
+        if (jwtToken) {
+            const token: string = jwt.sign({ id: userId, role: role }, jwtToken, {
+                expiresIn: "1d",
+            })
+            return token
+        }
+        throw new Error('jwt key is not found')
+
     }
     async VerifyJwt(token: string): Promise<JwtPayload | null> {
         const jwtToken=process.env.JWT_SECRET_KEY as string
@@ -23,7 +36,9 @@ class JwtToken implements IjwtToken {
         const jwtToken =process.env.JWT_REFRESH_SECRET_KEY as Secret
         if (jwtToken) {
            
-            const token: string = jwt.sign({ id: userId, role: role }, jwtToken)
+            const token: string = jwt.sign({ id: userId, role: role }, jwtToken, {
+                expiresIn: "1d",
+            })
             return token
         }
         throw new Error('jwt key is not found')

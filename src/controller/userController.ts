@@ -59,7 +59,7 @@ class userController {
             const user = await this.userCase.LoginUser(email, password);
             if (user?.success) {
                 res.cookie('userToken', user.token, {
-                    sameSite: "lax",
+                    sameSite: "none",
                     secure: true
                 }).status(200).json(user);
             } else if (!user?.success) {

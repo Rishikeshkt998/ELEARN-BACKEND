@@ -100,10 +100,8 @@ class UserUseCase {
                         return { success: false, message: "User is blocked by admin!" };
                     }
                     else {
-                        const token = yield this.JwtToken.SignJwt(userData._id, "user");
-                        // const token = await this.JwtToken.SignJwt(userData)
+                        const token = yield this.JwtToken.SignUserJwt(userData._id, "user");
                         const Refreshtoken = yield this.JwtToken.refreshToken(userData._id, "user");
-                        // const Refreshtoken = await this.JwtToken.refreshToken(userData)
                         return { success: true, userData: userData, token: token, Refreshtoken: Refreshtoken };
                     }
                 }

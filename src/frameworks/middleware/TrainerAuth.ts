@@ -21,11 +21,12 @@ const TrainerAuth = async (req: Request, res: Response, next: NextFunction) => {
     const token = req.headers.authorization?.split(" ")[1] as string;
     // let token = req.cookies.trainerToken;
     console.log("token  trainer", token)
-    if (!token) {
-        return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
-    }
+    // if (!token) {
+    //     return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
+    // }
     try {
         const decoded = await jwt.VerifyJwt(token)
+        console.log("decoded",decoded)
         if (decoded && decoded.role != 'trainer') {
             return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
         }

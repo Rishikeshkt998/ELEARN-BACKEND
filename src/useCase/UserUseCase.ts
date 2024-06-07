@@ -94,10 +94,8 @@ class UserUseCase {
             } else if (userData.isBlocked) {
                 return { success: false, message: "User is blocked by admin!" };
             } else {
-                const token = await this.JwtToken.SignJwt(userData._id as string, "user")
-                // const token = await this.JwtToken.SignJwt(userData)
+                const token = await this.JwtToken.SignUserJwt(userData._id as string, "user")
                 const Refreshtoken = await this.JwtToken.refreshToken(userData._id as string, "user")
-                // const Refreshtoken = await this.JwtToken.refreshToken(userData)
 
                 return { success: true, userData: userData, token: token ,Refreshtoken:Refreshtoken}
             }

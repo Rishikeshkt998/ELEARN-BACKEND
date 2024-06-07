@@ -57,7 +57,7 @@ class userController {
                 const user = yield this.userCase.LoginUser(email, password);
                 if (user === null || user === void 0 ? void 0 : user.success) {
                     res.cookie('userToken', user.token, {
-                        sameSite: "lax",
+                        sameSite: "none",
                         secure: true
                     }).status(200).json(user);
                 }

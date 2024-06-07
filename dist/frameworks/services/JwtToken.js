@@ -14,11 +14,25 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 class JwtToken {
+    SignUserJwt(userId, role) {
+        return __awaiter(this, void 0, void 0, function* () {
+            const jwtToken = process.env.JWT_SECRET_KEY;
+            if (jwtToken) {
+                const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken, {
+                    expiresIn: "5m",
+                });
+                return token;
+            }
+            throw new Error('jwt key is not found');
+        });
+    }
     SignJwt(userId, role) {
         return __awaiter(this, void 0, void 0, function* () {
             const jwtToken = process.env.JWT_SECRET_KEY;
             if (jwtToken) {
-                const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken);
+                const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken, {
+                    expiresIn: "1d",
+                });
                 return token;
             }
             throw new Error('jwt key is not found');
@@ -35,7 +49,9 @@ class JwtToken {
         return __awaiter(this, void 0, void 0, function* () {
             const jwtToken = process.env.JWT_REFRESH_SECRET_KEY;
             if (jwtToken) {
-                const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken);
+                const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken, {
+                    expiresIn: "1d",
+                });
                 return token;
             }
             throw new Error('jwt key is not found');

@@ -26,6 +26,7 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
     // const refreshToken = req.headers.refreshtoken
     // console.log("refresh",refreshToken)
     let token = req.cookies.userToken;
+    console.log("token user", token);
     // let RefreshToken = req.cookies.refreshToken;
     if (!RefreshToken) {
         return res.json({ success: false, message: 'Token expired or not available' });

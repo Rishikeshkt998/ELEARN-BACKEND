@@ -24,11 +24,12 @@ const TrainerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
     // let token = req.cookies.trainerToken;
     console.log("token  trainer", token);
-    if (!token) {
-        return res.status(401).json({ success: false, message: "Unauthorized - No token provided" });
-    }
+    // if (!token) {
+    //     return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
+    // }
     try {
         const decoded = yield jwt.VerifyJwt(token);
+        console.log("decoded", decoded);
         if (decoded && decoded.role != 'trainer') {
             return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
         }
