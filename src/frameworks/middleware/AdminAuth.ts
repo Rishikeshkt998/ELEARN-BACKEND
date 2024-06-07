@@ -65,7 +65,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
         return res.status(401).json({ success: false, message: "Unauthorized - No token provided" })
     }
     try {
-        const jwtToken = process.env.JWt_SECRET_KEY as string
+        const jwtToken =process.env.JWt_SECRET_KEY as string
         console.log("jwt token",jwtToken)
         const decoded = jwt.verify(token, jwtToken) as JwtPayload
         // await jwt.VerifyJwt(token)

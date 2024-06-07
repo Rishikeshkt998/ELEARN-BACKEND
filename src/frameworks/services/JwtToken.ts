@@ -20,7 +20,7 @@ class JwtToken implements IjwtToken {
     }
 
     async refreshToken(userId: string, role: string): Promise<string> {
-        const jwtToken = process.env.JWT_REFRESH_SECRET_KEY as string
+        const jwtToken =process.env.JWT_REFRESH_SECRET_KEY as string
         if (jwtToken) {
            
             const token: string = jwt.sign({ id: userId, role: role }, jwtToken)
@@ -29,7 +29,7 @@ class JwtToken implements IjwtToken {
         throw new Error('jwt key is not found')
     }
     async VerifyRefreshJwt(token: string): Promise<JwtPayload | null> {
-        const jwtToken = process.env.JWT_REFRESH_SECRET_KEY as string
+        const jwtToken =process.env.JWT_REFRESH_SECRET_KEY as string
         const verified = jwt.verify(token, jwtToken) as JwtPayload
         return verified
 
