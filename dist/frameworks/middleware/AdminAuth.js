@@ -18,13 +18,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-const JwtToken_1 = __importDefault(require("../services/JwtToken"));
 const dotenv_1 = __importDefault(require("dotenv"));
+const JwtToken_1 = __importDefault(require("../services/JwtToken"));
 const adminRepository_1 = __importDefault(require("../repository/adminRepository"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const repository = new adminRepository_1.default();
 const Jwt = new JwtToken_1.default();
-dotenv_1.default.config();
 dotenv_1.default.config();
 const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function* () {
     var _a;
