@@ -56,7 +56,7 @@ class userController {
                 const { email, password } = req.body;
                 const user = yield this.userCase.LoginUser(email, password);
                 if (user === null || user === void 0 ? void 0 : user.success) {
-                    res.cookie('userToken', user.token, {
+                    res.cookie('refreshToken', user.Refreshtoken, {
                         sameSite: "none",
                         secure: true
                     }).status(200).json(user);
