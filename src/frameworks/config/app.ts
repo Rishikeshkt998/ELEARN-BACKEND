@@ -22,12 +22,11 @@ export const createServer=()=>{
             origin: process.env.ORIGIN || "*",
             credentials: true,
             methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-            allowedHeaders:
-                "Origin,X-Requested-With,Content-Type,Accept,Authorization",
+            allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization",
             optionsSuccessStatus: 200,
         };
 
-        app.use(cors(corsOptions));
+        app.use('*',cors(corsOptions));
 
         app.use((req: Request, res: Response, next: NextFunction) => {
             res.setHeader("Access-Control-Allow-Origin", process.env.ORIGIN || "*");
