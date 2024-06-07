@@ -58,8 +58,7 @@ class userController {
             const { email, password } = req.body;
             const user = await this.userCase.LoginUser(email, password);
             if (user?.success) {
-                res.cookie('userToken', user.Refreshtoken, {
-                    // expires: new Date(Date.now() + 300000),
+                res.cookie('userToken', user.token, {
                     sameSite: "none",
                     secure: true
                 }).status(200).json(user);

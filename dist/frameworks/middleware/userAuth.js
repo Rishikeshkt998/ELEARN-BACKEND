@@ -36,8 +36,8 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             if (refreshToken) {
                 const newAccessToken = yield jwt.SignJwt(refreshToken.id, refreshToken.role);
                 res.cookie('userToken', newAccessToken, {
-                    expires: new Date(Date.now() + 300000),
-                    httpOnly: true,
+                    sameSite: "none",
+                    secure: true
                 });
             }
         }
@@ -46,22 +46,6 @@ const userAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function*
             return res.status(500).json({ success: false, message: 'Internal server error' });
         }
     }
-    // if (!token) {
-    //     return res.status(401).send({ success: false, message: "Unauthorized - Token not provided" });
-    // }
-    // try {
-    //     const refreshToken = await jwt.VerifyRefreshJwt(RefreshToken);
-    //     if (refreshToken) {
-    //         const newAccessToken = await jwt.SignJwt(refreshToken.id, refreshToken.role);
-    //         res.cookie('userToken', newAccessToken, {
-    //             expires: new Date(Date.now() + 300000),
-    //             httpOnly: true,
-    //         });
-    //     }
-    // } catch (error) {
-    //     console.error("Error generating new access token:", error);
-    //     return res.status(500).json({ success: false, message: 'Internal server error' });
-    // }
     try {
         const decoded = yield jwt.VerifyJwt(token);
         if (decoded && decoded.role != 'user') {
