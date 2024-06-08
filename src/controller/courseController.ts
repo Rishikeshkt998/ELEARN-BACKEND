@@ -243,6 +243,38 @@ class courseController {
         }
 
     }
+    async TotalCount(req: Request, res: Response) {
+        try {
+
+            const count = await this.courseCase.TotalCount()
+            if (count) {
+                res.status(200).json({ success: true, count });
+
+            } else {
+                res.status(200).json({ success: false });
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async TotalTutorCount(req: Request, res: Response) {
+        try {
+            const id = req.params.id
+            const count = await this.courseCase.TotalTutorCount(id)
+            if (count) {
+                res.status(200).json({ success: true, count });
+
+            } else {
+                res.status(200).json({ success: false });
+            }
+
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async courseAnalysis(req: Request, res: Response) {
         try {
             

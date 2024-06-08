@@ -242,6 +242,31 @@ class courseUseCase {
             console.log(error)
         }
     }
+    
+    async TotalCount() {
+        try {
+            const count = await this.IcourseRepository.getTotalCounts()
+            console.log(count)
+            if (count) {
+                return count
+            }
+            return null
+        } catch (error) {
+            console.log(error)
+        }
+    }
+    async TotalTutorCount(id:string) {
+        try {
+            const count = await this.IcourseRepository.getTotalCountsTutor(id)
+            console.log(count)
+            if (count) {
+                return count
+            }
+            return null
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async AnalysisCourse() {
         try {
             const course = await this.IcourseRepository.CourseDataforAnalysis()

@@ -270,6 +270,39 @@ class courseController {
             }
         });
     }
+    TotalCount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const count = yield this.courseCase.TotalCount();
+                if (count) {
+                    res.status(200).json({ success: true, count });
+                }
+                else {
+                    res.status(200).json({ success: false });
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    TotalTutorCount(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                const count = yield this.courseCase.TotalTutorCount(id);
+                if (count) {
+                    res.status(200).json({ success: true, count });
+                }
+                else {
+                    res.status(200).json({ success: false });
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     courseAnalysis(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

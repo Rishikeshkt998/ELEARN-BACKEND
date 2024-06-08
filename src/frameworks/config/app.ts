@@ -41,16 +41,7 @@ export const createServer=()=>{
             res.setHeader("Access-Control-Allow-Credentials", "true");
             next();
         });
-        // app.use(
-        //     cors({
-        //         // origin: 'http://localhost:3000',
-        //         origin: process.env.ORIGIN || "*" ,
-        //         methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-        //         credentials: true,
-        //         allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization",
-        //         optionsSuccessStatus: 200,
-        //     })
-        // )
+        
         app.use('/api/user',userRouter)
         app.use('/api/admin',adminRouter)
         app.use('/api/trainer', trainerRouter)

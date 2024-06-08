@@ -66,6 +66,7 @@ router.post('/question', (req, res) => CourseController.QuestionAdd(req, res));
 router.get('/getquestion/:id', (req, res) => CourseController.GetQuestion(req, res));
 router.get('/fetchreviews/:id', (req, res) => CourseController.getReviews(req, res));
 router.post('/commentreply', (req, res) => CourseController.addReply(req, res));
+router.get('/totalcountTutor/:id', (req, res) => CourseController.TotalTutorCount(req, res));
 router.get('/coursetutoranalysis/:id', (req, res) => CourseController.courseAnalysisForTutor(req, res));
 router.get('/userdataanalysis/:id', (req, res) => CourseController.userAnalysisForTutor(req, res));
 router.get('/orderdataanalysis/:id', (req, res) => CourseController.orderAnalysisForTutor(req, res));

@@ -425,6 +425,121 @@ async CourseDataforAnalysis(){
     }
 
 }
+async getTotalCounts() {
+    try {
+        const [coursesResult, usersResult, tutorsResult, salesResult] = await Promise.all([
+            courseModel.aggregate([{ $count: "totalCourses" }]),
+            userModel.aggregate([{ $count: "totalUsers" }]),
+            trainerModel.aggregate([{ $count: "totalTutors" }]),
+            orderModel.aggregate([{ $count: "totalSales" }])
+        ]);
+
+        const totalCourses = coursesResult.length > 0 ? coursesResult[0].totalCourses : 0;
+        const totalUsers = usersResult.length > 0 ? usersResult[0].totalUsers : 0;
+        const totalTutors = tutorsResult.length > 0 ? tutorsResult[0].totalTutors : 0;
+        const totalSales = salesResult.length > 0 ? salesResult[0].totalSales : 0;
+
+        console.log(`Total number of courses: ${totalCourses}`);
+        console.log(`Total number of users: ${totalUsers}`);
+        console.log(`Total number of tutors: ${totalTutors}`);
+        console.log(`Total number of sales: ${totalSales}`);
+
+        return {
+            totalCourses,
+            totalUsers,
+            totalTutors,
+            totalSales
+        };
+    } catch (error) {
+        console.error('Error counting documents:', error);
+        throw error;
+    }
+}
+    async getTotalCountsTutor(instructorId:string) {
+        try {
+            // const coursesResult = await courseModel.aggregate([
+            //     { $match: { instructorId: instructorId } },
+            //     { $count: "totalCourses" }
+            // ]);
+
+            // const courses= await courseModel.find({ instructorId: instructorId })
+            // const courseIds = courses.map((course) => course._id);
+            // const usersResult = await userModel.countDocuments({
+            //     courseIds: { $in: courseIds }
+            // });
+            // const usersResult = await userModel.aggregate([
+            //     { $match: { courseIds: { $in: courseIds } } },
+            //     { $count: "totalUsers" }
+            // ]);
+
+            // const totalAmountResult = await orderModel.aggregate([
+            //     { $match: { courseId: { $in: courseIds } } },
+            //     { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
+            // ]);
+
+            // const salesResult = await orderModel.aggregate([
+            //     { $match: { courseId: { $in: courseIds } } },
+            //     { $count: "totalSales" }
+            // ]);
+
+            // const totalCourses = coursesResult.length > 0 ? coursesResult[0].totalCourses : 0;
+            // const totalUsers = usersResult.length > 0 ? usersResult[0].totalUsers : 0;
+            // const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+            // const totalSales = salesResult.length > 0 ? salesResult[0].totalSales : 0;
+
+            // console.log(`Total number of courses: ${totalCourses}`);
+            // console.log(`Total number of users: ${totalUsers}`);
+            // // console.log(`Total number of tutors: ${totalTutors}`);
+            // console.log(`Total number of sales: ${totalSales}`);
+
+            // return {
+            //     totalCourses,
+            //     totalUsers,
+            //     totalAmount,
+            //     totalSales
+            // };
+            const courses = await courseModel.find({ instructorId })
+            const courseIds = courses.map((course) => course._id);
+
+            const coursesResult = await courseModel.countDocuments({ instructorId });
+
+            const usersResult = await userModel.countDocuments({
+                courseIds: { $in: courseIds }
+            });
+
+            const tutorsResult = await trainerModel.countDocuments({ _id: instructorId });
+
+            const salesResult = await orderModel.countDocuments({ courseId: { $in: courseIds } });
+
+            const totalAmountResult = await orderModel.aggregate([
+                { $match: { courseId: { $in: courseIds } } },
+                { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
+            ]);
+
+            const totalCourses = coursesResult;
+            const totalUsers = usersResult;
+            const totalTutors = tutorsResult;
+            const totalSales = salesResult;
+            const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+
+            console.log(`Total number of courses: ${totalCourses}`);
+            console.log(`Total number of users: ${totalUsers}`);
+            console.log(`Total number of tutors: ${totalTutors}`);
+            console.log(`Total number of sales: ${totalSales}`);
+            console.log(`Total amount: ${totalAmount}`);
+
+            return {
+                totalCourses,
+                totalUsers,
+                totalTutors,
+                totalSales,
+                totalAmount
+            };
+        } catch (error) {
+            console.error('Error counting documents:', error);
+            throw error;
+        }
+    }
 
     async findEnrolledCourses(id: string,usersId:string): Promise<any> {
         try {

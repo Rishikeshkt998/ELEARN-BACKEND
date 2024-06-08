@@ -50,7 +50,6 @@ router.put('/emailchange/:id', userAuth,  (req, res) => controller.changEmail(re
 router.post('/verifyEmail', userAuth, (req, res) => controller.ChangeEmailVerification(req,res))
 router.get('/getcourse/:id',(req, res) => controller.getUserCousrse(req,res))
 router.get('/courseAccess/:id', CourseAccessAuth, (req, res) => controller.getUserCourseAccess(req, res))
-// router.post('/checkoutpage', userAuth, (req, res) => controller.checkoutSession(req,res))
 router.get('/getpayment', userAuth, (req, res) => controller.sendStripePublishableKey(req,res))
 router.get('/getvideocallkey', CourseAccessAuth, (req, res) => controller.SendVideoCallKey(req, res))
 router.post('/payment', userAuth, (req, res) => controller.newPayment(req, res))
@@ -84,14 +83,6 @@ router.post('/newMessage', (req, res) => { ChatController.addMessage(req, res) }
 router.get('/getConversation/:userId/:tutorid', (req, res) => { ChatController.getConversation(req, res) });
 router.get('/findTutorById/:userId', (req, res) => { ChatController.findTutorById(req, res) });
 router.get('/tutorschat', (req, res) => { ChatController.TrainersForChat(req, res) });
-
-
-// router.post('/accesschat', (req, res) => { ChatController.accessChat(req, res) });
-// router.get('/accesschat', (req, res) => { ChatController.fetchChats(req, res) });
-// router.post('/group', (req, res) => { ChatController.createGroupchat(req, res) });
-// router.put('/rename', (req, res) => { ChatController.renameGroup(req, res) });
-// router.put('/groupremove', (req, res) => { ChatController.removeFromGroup(req, res) });
-// router.put('/groupadd', (req, res) => { ChatController.addToGroup(req, res) });
 
 
 

@@ -26,6 +26,8 @@ interface IcourseRepository {
     AddReply(reviewId:string, replyText:string): Promise<any>,
     findEnrolledCourses(id: string,usersId:string): Promise<any>
     SearchCourses(search: string,category:string,price:string): Promise<any>
+    getTotalCounts():Promise<any>,
+    getTotalCountsTutor(id: string): Promise<any>,
     CourseDataforAnalysis():Promise<any>
     UserDataforAnalysis(): Promise<any>
     OrderDataforAnalysis(): Promise<any>

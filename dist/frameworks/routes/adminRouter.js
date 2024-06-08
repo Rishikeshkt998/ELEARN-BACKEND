@@ -42,6 +42,7 @@ router.put('/verifycourse/:id', AdminAuth_1.default, (req, res) => controller.ve
 router.put('/unverifycourse/:id', AdminAuth_1.default, (req, res) => controller.unverifyCourse(req, res));
 router.post('/adminlogout', AdminAuth_1.default, (req, res) => controller.adminLogout(req, res));
 //course
+router.get('/totalcount', (req, res) => CourseController.TotalCount(req, res));
 router.get('/courseanalysis', (req, res) => CourseController.courseAnalysis(req, res));
 router.get('/useranalysis', (req, res) => CourseController.userAnalysis(req, res));
 router.get('/orderanalysis', (req, res) => CourseController.orderAnalysis(req, res));

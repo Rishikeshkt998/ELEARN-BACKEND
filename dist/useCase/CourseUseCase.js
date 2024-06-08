@@ -269,6 +269,36 @@ class courseUseCase {
             }
         });
     }
+    TotalCount() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const count = yield this.IcourseRepository.getTotalCounts();
+                console.log(count);
+                if (count) {
+                    return count;
+                }
+                return null;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    TotalTutorCount(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const count = yield this.IcourseRepository.getTotalCountsTutor(id);
+                console.log(count);
+                if (count) {
+                    return count;
+                }
+                return null;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     AnalysisCourse() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
