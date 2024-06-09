@@ -7,7 +7,6 @@ class chatController {
     }
     async newConversation(req: Request, res: Response) {
         try {
-
             const { senderId, receiverId } = req.body
             if (senderId && receiverId) {
                 const newConversation = await this.chatCase.newConversation(senderId, receiverId);
