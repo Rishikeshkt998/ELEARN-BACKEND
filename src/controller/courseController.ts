@@ -36,7 +36,8 @@ class courseController {
     }
     async Courseshows(req: Request, res: Response) {
         try {
-            const course = await this.courseCase.showCourses()
+            const id=req.params.id
+            const course = await this.courseCase.showCourses(id)
             if (course) {
                 return res.status(200).json(course)
             } else {

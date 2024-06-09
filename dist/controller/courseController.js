@@ -50,7 +50,8 @@ class courseController {
     Courseshows(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const course = yield this.courseCase.showCourses();
+                const id = req.params.id;
+                const course = yield this.courseCase.showCourses(id);
                 if (course) {
                     return res.status(200).json(course);
                 }

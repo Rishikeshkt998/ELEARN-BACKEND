@@ -12,7 +12,7 @@ interface IcourseRepository {
     courseContentEdit(courseId:string,CourseContentData: any): Promise<any>
     findCategories(): Promise<Category[]>,
     findCourses(): Promise<Course[]>,
-    findCoursestutor(): Promise<Course[]>,
+    findCoursestutor(id:string): Promise<Course[]>,
     ChapterAdd(title:string,id:string,order:string): Promise<any>,
     // LessonAdd(formData: string): Promise<any>,
     getChapterbyId(id:string): Promise<Chapter[]|null>,

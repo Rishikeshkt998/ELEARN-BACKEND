@@ -39,9 +39,9 @@ class courseUseCase {
             console.log(error)
         }
     }
-    async showCourses() {
+    async showCourses(id:string) {
         try {
-            const course = await this.IcourseRepository.findCoursestutor()
+            const course = await this.IcourseRepository.findCoursestutor(id)
 
             if (course) {
                 return course

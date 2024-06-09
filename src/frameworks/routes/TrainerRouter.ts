@@ -52,7 +52,7 @@ router.post('/trainerlogout', (req, res) => controller.trainerLogout(req, res))
 
 //course
 router.get('/course', (req, res) => CourseController.Courseshow(req, res))
-router.get('/coursetutor',  (req, res) => CourseController.Courseshows(req, res))
+router.get('/coursetutor/:id',  (req, res) => CourseController.Courseshows(req, res))
 router.get('/category', (req, res) => CourseController.Categoryshow(req,res))
 router.post('/addcourse', (req, res) => CourseController.addCourse(req, res))
 router.get('/getcourse/:courseId', (req, res) => CourseController.EditDisplayCoursebyId(req, res))

@@ -53,10 +53,10 @@ class courseUseCase {
             }
         });
     }
-    showCourses() {
+    showCourses(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const course = yield this.IcourseRepository.findCoursestutor();
+                const course = yield this.IcourseRepository.findCoursestutor(id);
                 if (course) {
                     return course;
                 }

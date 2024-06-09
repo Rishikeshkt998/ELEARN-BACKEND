@@ -18,7 +18,7 @@ class JwtToken implements IjwtToken {
         const jwtToken = process.env.JWT_SECRET_KEY as Secret
         if (jwtToken) {
             const token: string = jwt.sign({ id: userId, role: role }, jwtToken, {
-                expiresIn: "1d",
+                expiresIn: "10d",
             })
             return token
         }
@@ -37,7 +37,7 @@ class JwtToken implements IjwtToken {
         if (jwtToken) {
            
             const token: string = jwt.sign({ id: userId, role: role }, jwtToken, {
-                expiresIn: "1d",
+                expiresIn: "10d",
             })
             return token
         }

@@ -38,7 +38,7 @@ class courseRepository {
     }
     findCourses() {
         return __awaiter(this, void 0, void 0, function* () {
-            const course = yield courseModel_1.courseModel.find({ isDeleted: false, adminVerified: true });
+            const course = yield courseModel_1.courseModel.find({ isDeleted: false, adminVerified: true, publish: true });
             const findCourse = course.map((course) => ({
                 _id: course._id,
                 category: course.category,
@@ -71,9 +71,9 @@ class courseRepository {
             return findCourse;
         });
     }
-    findCoursestutor() {
+    findCoursestutor(id) {
         return __awaiter(this, void 0, void 0, function* () {
-            const course = yield courseModel_1.courseModel.find({ isDeleted: false, adminVerified: false });
+            const course = yield courseModel_1.courseModel.find({ instructorId: id });
             const findCourse = course.map((course) => ({
                 _id: course._id,
                 category: course.category,
@@ -423,41 +423,6 @@ class courseRepository {
     getTotalCountsTutor(instructorId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // const coursesResult = await courseModel.aggregate([
-                //     { $match: { instructorId: instructorId } },
-                //     { $count: "totalCourses" }
-                // ]);
-                // const courses= await courseModel.find({ instructorId: instructorId })
-                // const courseIds = courses.map((course) => course._id);
-                // const usersResult = await userModel.countDocuments({
-                //     courseIds: { $in: courseIds }
-                // });
-                // const usersResult = await userModel.aggregate([
-                //     { $match: { courseIds: { $in: courseIds } } },
-                //     { $count: "totalUsers" }
-                // ]);
-                // const totalAmountResult = await orderModel.aggregate([
-                //     { $match: { courseId: { $in: courseIds } } },
-                //     { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
-                // ]);
-                // const salesResult = await orderModel.aggregate([
-                //     { $match: { courseId: { $in: courseIds } } },
-                //     { $count: "totalSales" }
-                // ]);
-                // const totalCourses = coursesResult.length > 0 ? coursesResult[0].totalCourses : 0;
-                // const totalUsers = usersResult.length > 0 ? usersResult[0].totalUsers : 0;
-                // const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
-                // const totalSales = salesResult.length > 0 ? salesResult[0].totalSales : 0;
-                // console.log(`Total number of courses: ${totalCourses}`);
-                // console.log(`Total number of users: ${totalUsers}`);
-                // // console.log(`Total number of tutors: ${totalTutors}`);
-                // console.log(`Total number of sales: ${totalSales}`);
-                // return {
-                //     totalCourses,
-                //     totalUsers,
-                //     totalAmount,
-                //     totalSales
-                // };
                 const courses = yield courseModel_1.courseModel.find({ instructorId });
                 const courseIds = courses.map((course) => course._id);
                 const coursesResult = yield courseModel_1.courseModel.countDocuments({ instructorId });
@@ -653,7 +618,7 @@ class courseRepository {
     SearchCourses(search, category, price) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let query = { isDeleted: false };
+                let query = { isDeleted: false, adminVerified: false, publish: true };
                 if (category) {
                     query.category = category;
                 }

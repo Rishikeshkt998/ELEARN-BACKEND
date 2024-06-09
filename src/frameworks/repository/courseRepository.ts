@@ -35,7 +35,7 @@ class courseRepository implements IcourseRepository {
 
     }
     async findCourses(): Promise<Course[]> {
-        const course: (Course & { _id: ObjectId })[] = await courseModel.find({ isDeleted: false, adminVerified :true})
+        const course: (Course & { _id: ObjectId })[] = await courseModel.find({ isDeleted: false, adminVerified: true, publish: true })
         const findCourse: Course[] = course.map((course) => ({
             _id: course._id,
             category: course.category,
@@ -71,8 +71,8 @@ class courseRepository implements IcourseRepository {
         return findCourse
 
     }
-    async findCoursestutor(): Promise<Course[]> {
-        const course: (Course & { _id: ObjectId })[] = await courseModel.find({isDeleted:false, adminVerified: false})
+    async findCoursestutor(id:string): Promise<Course[]> {
+        const course: (Course & { _id: ObjectId })[] = await courseModel.find({ instructorId:id })
         const findCourse: Course[] = course.map((course) => ({
             _id: course._id,
             category: course.category,
@@ -459,47 +459,6 @@ async getTotalCounts() {
 }
     async getTotalCountsTutor(instructorId:string) {
         try {
-            // const coursesResult = await courseModel.aggregate([
-            //     { $match: { instructorId: instructorId } },
-            //     { $count: "totalCourses" }
-            // ]);
-
-            // const courses= await courseModel.find({ instructorId: instructorId })
-            // const courseIds = courses.map((course) => course._id);
-            // const usersResult = await userModel.countDocuments({
-            //     courseIds: { $in: courseIds }
-            // });
-            // const usersResult = await userModel.aggregate([
-            //     { $match: { courseIds: { $in: courseIds } } },
-            //     { $count: "totalUsers" }
-            // ]);
-
-            // const totalAmountResult = await orderModel.aggregate([
-            //     { $match: { courseId: { $in: courseIds } } },
-            //     { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
-            // ]);
-
-            // const salesResult = await orderModel.aggregate([
-            //     { $match: { courseId: { $in: courseIds } } },
-            //     { $count: "totalSales" }
-            // ]);
-
-            // const totalCourses = coursesResult.length > 0 ? coursesResult[0].totalCourses : 0;
-            // const totalUsers = usersResult.length > 0 ? usersResult[0].totalUsers : 0;
-            // const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
-            // const totalSales = salesResult.length > 0 ? salesResult[0].totalSales : 0;
-
-            // console.log(`Total number of courses: ${totalCourses}`);
-            // console.log(`Total number of users: ${totalUsers}`);
-            // // console.log(`Total number of tutors: ${totalTutors}`);
-            // console.log(`Total number of sales: ${totalSales}`);
-
-            // return {
-            //     totalCourses,
-            //     totalUsers,
-            //     totalAmount,
-            //     totalSales
-            // };
             const courses = await courseModel.find({ instructorId })
             const courseIds = courses.map((course) => course._id);
 
@@ -748,7 +707,7 @@ async getTotalCounts() {
     
     async SearchCourses(search?: string, category?: string | null, price?: string | null): Promise<any> {
         try {
-            let query: any = {isDeleted:false}
+            let query: any = { isDeleted: false, adminVerified: false,publish:true }
 
             if (category) {
                 query.category = category;
