@@ -21,6 +21,7 @@ class JwtToken implements IjwtToken {
                 expiresIn: "10d",
             })
             return token
+            
         }
         throw new Error('jwt key is not found')
 
