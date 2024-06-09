@@ -11,7 +11,7 @@ on:
 jobs:
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: self-hosted
 
     strategy:
       matrix:
@@ -28,5 +28,5 @@ jobs:
     - run: npm ci
     - run: |
           touch .env
-          echo "${{secrets.PRODS}}" >.env
+          echo "${{secrets.PROD}}" >.env
   
