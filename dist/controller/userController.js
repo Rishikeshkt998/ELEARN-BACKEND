@@ -331,14 +331,6 @@ class userController {
             });
         });
     }
-    // async checkoutSession(req: Request, res: Response) {
-    //     try {
-    //         let sessionId = await paymentCheckOut(req.body);
-    //         res.status(200).json(sessionId);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
     sendStripePublishableKey(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             res.status(200).json({

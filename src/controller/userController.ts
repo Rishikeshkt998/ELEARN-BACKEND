@@ -327,16 +327,7 @@ class userController {
         })
 
     }
-    // async checkoutSession(req: Request, res: Response) {
-    //     try {
-
-
-    //         let sessionId = await paymentCheckOut(req.body);
-    //         res.status(200).json(sessionId);
-    //     } catch (error) {
-    //         console.log(error);
-    //     }
-    // }
+    
     async sendStripePublishableKey(req: Request, res: Response) {
         res.status(200).json({
             publishablekey: process.env.STRIPE_PUBLISHABLE_KEY
