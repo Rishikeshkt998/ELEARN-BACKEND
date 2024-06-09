@@ -132,19 +132,55 @@ class chatRepository {
     }
     findUserForChat() {
         return __awaiter(this, void 0, void 0, function* () {
-            const userData = yield userModel_1.userModel.find();
-            const findeduser = userData.map((user) => ({
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                password: user.password,
-                phone: user.phone,
-                profileimage: user.profileimage,
-                otp: user.otp,
-                isVerified: user.isVerified,
-                isBlocked: user.isBlocked
-            }));
-            return findeduser;
+            try {
+                const user = yield userModel_1.userModel.aggregate([
+                    {
+                        $lookup: {
+                            from: "messages",
+                            localField: "_id",
+                            foreignField: "senderId",
+                            as: "latestMessage"
+                        }
+                    },
+                    {
+                        $unwind: { path: "$latestMessage", preserveNullAndEmptyArrays: true }
+                    },
+                    {
+                        $sort: { "latestMessage.creationTime": -1 }
+                    },
+                    {
+                        $group: {
+                            _id: "$_id",
+                            name: { $first: "$name" },
+                            email: { $first: "$email" },
+                            phone: { $first: "$phone" },
+                            password: { $first: "$password" },
+                            profileimage: { $first: "$profileimage" },
+                            latestMessage: { $first: "$latestMessage" }
+                        }
+                    },
+                    {
+                        $sort: { "latestMessage.creationTime": -1 }
+                    }
+                ]);
+                const findeduser = user.map((user) => ({
+                    id: user._id,
+                    name: user.name,
+                    email: user.email,
+                    phone: user.phone,
+                    profileimage: user.profileimage,
+                    otp: user.otp,
+                    isVerified: user.isVerified,
+                    isBlocked: user.isBlocked,
+                    latestMessage: user.latestMessage,
+                    password: user.password
+                }));
+                return findeduser;
+            }
+            catch (error) {
+                console.log(error);
+                throw error;
+            }
         });
     }
 }

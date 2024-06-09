@@ -9,7 +9,7 @@ interface User {
 function socketServer(server: any) {
     const io = new Server(server, {
         cors: {
-            origin: "*",
+            origin:process.env.ORIGIN || "*",
             methods: ['GET', 'POST']
         }
     });

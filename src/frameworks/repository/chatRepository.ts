@@ -87,7 +87,7 @@ class chatRepository implements IchatRepository {
             console.log(error)
         }
     }
-    async findUserById(userId: string): Promise<any> {
+    async findUserById(userId: string): Promise<any> {  
         try {
             const findUserById = await userModel.findById(userId)
             return findUserById
@@ -113,20 +113,56 @@ class chatRepository implements IchatRepository {
 
     }
     async findUserForChat(): Promise<User[]> {
-        const userData: (User & { _id: ObjectId })[] = await userModel.find()
-        const findeduser: User[] = userData.map((user) => ({
-            id: user._id,
-            name: user.name,
-            email: user.email,
-            password: user.password,
-            phone: user.phone,
-            profileimage: user.profileimage,
-            otp: user.otp,
-            isVerified: user.isVerified,
-            isBlocked: user.isBlocked
+        try {
+            const user = await userModel.aggregate([
+                {
+                    $lookup: {
+                        from: "messages",
+                        localField: "_id",
+                        foreignField: "senderId",
+                        as: "latestMessage"
+                    }
+                },
+                {
+                    $unwind: { path: "$latestMessage", preserveNullAndEmptyArrays: true }
+                },
+                {
+                    $sort: { "latestMessage.creationTime": -1 } 
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        name: { $first: "$name" },
+                        email: { $first: "$email" },
+                        phone: { $first: "$phone" },
+                        password: { $first: "$password" },
+                        profileimage: { $first: "$profileimage" },
+                        latestMessage: { $first: "$latestMessage" } 
+                    }
+                },
+                {
+                    $sort: { "latestMessage.creationTime": -1 } 
+                }
+            ]);
+            const findeduser = user.map((user: any) => ({
+                id: user._id,
+                name: user.name,
+                email: user.email,
+                phone: user.phone,
+                profileimage: user.profileimage,
+                otp: user.otp,
+                isVerified: user.isVerified,
+                isBlocked: user.isBlocked,
+                latestMessage: user.latestMessage ,
+                password: user.password
+            }));
 
-        }));
-        return findeduser
+            return findeduser;
+        } catch (error) {
+            console.log(error);
+            throw error;
+        }
+        
 
 
     }
@@ -135,160 +171,7 @@ class chatRepository implements IchatRepository {
 
 
 
-//new
-    // async accessChat(userId: string, current_userId: string) {
-    //     try {
-    //         var isChat: any = await chatModel.find({
-    //             isGroupChat: false,
-    //             $and: [
-    //                 { users: { $elemMatch: { $eq: current_userId } } },
-    //                 { users: { $elemMatch: { $eq: userId } } },
-    //             ],
-    //         })
-    //             .populate("users", "-password")
-    //             .populate("latestMessage");
 
-    //         isChat = await userModel.populate(isChat, {
-    //             path: "latestMessage.sender",
-    //             select: "name pic email",
-    //         });
-    //         return isChat;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async saveChat(chatData: { chatName: string, isGroupChat: boolean, users: string[] }) {
-    //     try {
-    //         const createdChat = await chatModel.create(chatData);
-    //         const FullChat = await chatModel.findOne({ _id: createdChat._id }).populate(
-    //             "users",
-    //             "-password"
-    //         );
-    //         return FullChat;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async getChat(userId: string) {
-    //     try {
-    //         let result;
-    //         const chat = await chatModel.find({ users: { $elemMatch: { $eq: userId } } })
-    //             .populate("users", "-password")
-    //             .populate("groupAdmin", "-password")
-    //             .populate("latestMessage")
-    //             .sort({ updatedAt: -1 })
-    //         if (chat) {
-    //             result = await userModel.populate(chat, {
-    //                 path: "latestMessage.sender",
-    //                 select: "name pic email",
-    //             })
-    //             return result;
-    //         }
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async createGroupChat(name: string, users: any, groupAdmin: any) {
-    //     try {
-    //         const groupChat = await chatModel.create({
-    //             chatName: name,
-    //             users,
-    //             isGroupChat: true,
-    //             groupAdmin
-    //         });
-
-    //         const fullGroupChat = await chatModel.findOne({ _id: groupChat._id })
-    //             .populate("users", "-password")
-    //             .populate("groupAdmin", "-password");
-
-    //         return fullGroupChat;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async renameGroup(chatId: string, chatName: string) {
-    //     try {
-    //         const updatedchat = await chatModel.findByIdAndUpdate(chatId, { chatName: chatName }, { new: true })
-    //             .populate('users', '-password')
-    //             .populate('groupAdmin', '-password');
-    //         return updatedchat;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async addToGroup(chatId: string, userId: string) {
-    //     try {
-    //         const added = await chatModel.findByIdAndUpdate(chatId, { $push: { users: userId } }, { new: true })
-    //             .populate("users", "-password")
-    //             .populate("groupAdmin", "-password");
-    //         return added;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async removeFromGroup(chatId: string, userId: string) {
-    //     try {
-    //         const removed = await chatModel.findByIdAndUpdate(
-    //             chatId,
-    //             {
-    //                 $pull: { users: userId },
-    //             },
-    //             {
-    //                 new: true,
-    //             }
-    //         )
-    //             .populate("users", "-password")
-    //             .populate("groupAdmin", "-password");
-    //         return removed;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
-    // async postShareSuggestedUsers(userId: string) {
-    //     try {
-    //         const ObjectId = mongoose.Types.ObjectId;
-    //         const UserId = new ObjectId(userId)
-
-    //         const users = await chatModel.aggregate([
-    //             { $match: { isGroupChat: false } },
-    //             { $match: { users: UserId } },
-    //             { $project: { otherUserID: { $setDifference: ["$users", [UserId]] } } },
-    //             {
-    //                 $lookup: {
-    //                     from: "users",
-    //                     localField: "otherUserID",
-    //                     foreignField: "_id",
-    //                     as: "otherUserDetails"
-    //                 }
-    //             },
-    //             {
-    //                 $project: {
-    //                     "_id": { $arrayElemAt: ["$otherUserDetails._id", 0] },
-    //                     "name": { $arrayElemAt: ["$otherUserDetails.name", 0] },
-    //                     "profile_picture": { $arrayElemAt: ["$otherUserDetails.profile_picture", 0] },
-    //                     "headline": { $arrayElemAt: ["$otherUserDetails.headLine", 0] }
-    //                 }
-    //             }
-    //         ]);
-    //         return users;
-    //     } catch (error) {
-    //         console.log(error as Error)
-    //     }
-    // }
-    // async getAllUsers(search: string | undefined, userId: string) {
-    //     try {
-    //         const keyword = search ? {
-    //             $or: [
-    //                 { name: { $regex: search, $options: 'i' } },
-    //                 { email: { $regex: search, $options: 'i' } }
-    //             ]
-    //         } : {}
-    //         const allUsers = await userModel.find(keyword).find({ _id: { $ne: userId } });
-    //         return allUsers;
-    //     } catch (error) {
-    //         console.log(error as Error);
-    //     }
-    // }
     
     
 

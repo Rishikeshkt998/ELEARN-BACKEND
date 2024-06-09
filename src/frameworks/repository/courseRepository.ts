@@ -233,7 +233,9 @@ class courseRepository implements IcourseRepository {
 
 
             const chapterIds = course.chapters;
+            console.log("chaptrerids",chapterIds)
             const chapters = await chapterModel.find({ _id: { $in: chapterIds } }).exec();
+            console.log("chapters",chapters)
 
             return chapters;
         } catch (error) {
