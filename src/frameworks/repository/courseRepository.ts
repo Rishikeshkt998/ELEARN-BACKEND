@@ -707,7 +707,7 @@ async getTotalCounts() {
     
     async SearchCourses(search?: string, category?: string | null, price?: string | null): Promise<any> {
         try {
-            let query: any = {isDeleted:false}
+            let query: any = { isDeleted: false, adminVerified: true, publish: true }
 
             if (category) {
                 query.category = category;
@@ -727,6 +727,7 @@ async getTotalCounts() {
             const matchingCourses = await courseModel
                 .find(query)
                 .sort(sortOptions)
+            console.log("matching courses",matchingCourses)
             return matchingCourses;
         } catch (error) {
             console.error('Error searching courses:', error);

@@ -618,7 +618,7 @@ class courseRepository {
     SearchCourses(search, category, price) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let query = { isDeleted: false };
+                let query = { isDeleted: false, adminVerified: true, publish: true };
                 if (category) {
                     query.category = category;
                 }
@@ -635,6 +635,7 @@ class courseRepository {
                 const matchingCourses = yield courseModel_1.courseModel
                     .find(query)
                     .sort(sortOptions);
+                console.log("matching courses", matchingCourses);
                 return matchingCourses;
             }
             catch (error) {
