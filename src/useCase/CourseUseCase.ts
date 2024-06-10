@@ -39,6 +39,19 @@ class courseUseCase {
             console.log(error)
         }
     }
+    async showCourseForAdmin() {
+        try {
+            const course = await this.IcourseRepository.findCoursesView()
+
+            if (course) {
+                return course
+            }
+            return null
+
+        } catch (error) {
+            console.log(error)
+        }
+    }
     async showCourses(id:string) {
         try {
             const course = await this.IcourseRepository.findCoursestutor(id)

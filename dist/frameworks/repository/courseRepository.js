@@ -71,6 +71,41 @@ class courseRepository {
             return findCourse;
         });
     }
+    findCoursesView() {
+        return __awaiter(this, void 0, void 0, function* () {
+            const course = yield courseModel_1.courseModel.find({ isDeleted: false });
+            const findCourse = course.map((course) => ({
+                _id: course._id,
+                category: course.category,
+                price: course.price,
+                estimatedPrice: course.estimatedPrice,
+                name: course.name,
+                level: course.level,
+                demoUrl: course.demoUrl,
+                instructor: course.instructor,
+                instructorId: course.instructorId,
+                instructorName: course.instructorName,
+                description: course.description,
+                tags: course.tags,
+                thumbnail: course.thumbnail,
+                chapters: course.chapters,
+                prerequisite: course.prerequisite,
+                benefits: course.benefits,
+                approved: course.approved,
+                listed: course.listed,
+                image: course.image,
+                adminVerified: course.adminVerified,
+                publish: course.publish,
+                rating: course.rating,
+                noOfPurchase: course.noOfPurchase,
+                isDeleted: course.isDeleted,
+                reviews: course.reviews,
+                questions: course.questions,
+                createdAt: course.createdAt,
+            }));
+            return findCourse;
+        });
+    }
     findCoursestutor(id) {
         return __awaiter(this, void 0, void 0, function* () {
             const course = yield courseModel_1.courseModel.find({ instructorId: id });

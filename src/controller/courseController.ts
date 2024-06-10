@@ -34,6 +34,19 @@ class courseController {
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
+    async CourseshowAdmin(req: Request, res: Response) {
+        try {
+            const course = await this.courseCase.showCourseForAdmin()
+            if (course) {
+                return res.status(200).json(course)
+            } else {
+                return res.status(401).json({ success: false, message: 'course not found' })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
     async Courseshows(req: Request, res: Response) {
         try {
             const id=req.params.id

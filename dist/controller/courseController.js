@@ -47,6 +47,23 @@ class courseController {
             }
         });
     }
+    CourseshowAdmin(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.courseCase.showCourseForAdmin();
+                if (course) {
+                    return res.status(200).json(course);
+                }
+                else {
+                    return res.status(401).json({ success: false, message: 'course not found' });
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        });
+    }
     Courseshows(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

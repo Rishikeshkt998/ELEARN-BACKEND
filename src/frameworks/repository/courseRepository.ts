@@ -71,6 +71,43 @@ class courseRepository implements IcourseRepository {
         return findCourse
 
     }
+    async findCoursesView(): Promise<Course[]> {
+        const course: (Course & { _id: ObjectId })[] = await courseModel.find({ isDeleted: false})
+        const findCourse: Course[] = course.map((course) => ({
+            _id: course._id,
+            category: course.category,
+            price: course.price,
+            estimatedPrice: course.estimatedPrice,
+            name: course.name,
+            level: course.level,
+            demoUrl: course.demoUrl,
+            instructor: course.instructor,
+            instructorId: course.instructorId,
+            instructorName: course.instructorName,
+            description: course.description,
+            tags: course.tags,
+            thumbnail: course.thumbnail,
+            chapters: course.chapters,
+            prerequisite: course.prerequisite,
+            benefits: course.benefits,
+            approved: course.approved,
+            listed: course.listed,
+            image: course.image,
+            adminVerified: course.adminVerified,
+            publish: course.publish,
+            rating: course.rating,
+            noOfPurchase: course.noOfPurchase,
+            isDeleted: course.isDeleted,
+            reviews: course.reviews,
+            questions: course.questions,
+            createdAt: course.createdAt,
+
+        }));
+
+
+        return findCourse
+
+    }
     async findCoursestutor(id:string): Promise<Course[]> {
         const course: (Course & { _id: ObjectId })[] = await courseModel.find({ instructorId:id })
         const findCourse: Course[] = course.map((course) => ({

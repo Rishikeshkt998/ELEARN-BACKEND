@@ -53,6 +53,20 @@ class courseUseCase {
             }
         });
     }
+    showCourseForAdmin() {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const course = yield this.IcourseRepository.findCoursesView();
+                if (course) {
+                    return course;
+                }
+                return null;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     showCourses(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
