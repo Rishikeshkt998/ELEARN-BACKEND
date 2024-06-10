@@ -101,6 +101,7 @@ class chatRepository implements IchatRepository {
             id: trainer._id,
             name: trainer.name,
             email: trainer.email,
+            image:trainer.image,
             password: trainer.password,
             phone: trainer.phone,
             dateOfBirth: trainer.dateOfBirth,
