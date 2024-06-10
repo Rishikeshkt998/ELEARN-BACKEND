@@ -31,7 +31,7 @@ const TrainerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
         const decoded = yield jwt.VerifyJwt(token);
         console.log("decoded", decoded);
         if (decoded && decoded.role != 'trainer') {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor" });
         }
         if (decoded && decoded.id) {
             let trainer = yield repository.findTutorById(decoded.id);
@@ -46,12 +46,12 @@ const TrainerAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, functi
             }
         }
         else {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor" });
         }
     }
     catch (error) {
         console.log(error);
-        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor" });
     }
 });
 exports.default = TrainerAuth;

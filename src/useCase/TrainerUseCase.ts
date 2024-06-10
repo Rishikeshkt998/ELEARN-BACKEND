@@ -245,17 +245,17 @@ class TrainerUseCase {
             return { success: false, message: 'Internal server error' };
         }
     }
-    async trainerProfilePicUpdate(id: string, imagePath: string) {
+    async trainerProfilePicUpdate(id: string, imageUrl: string) {
         try {
 
 
-            const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
-            console.log(imageUrl)
+            // const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
+            // console.log(imageUrl)
 
 
             if (imageUrl) {
                 const saveimage = await this.ItrainerRepository.Trainersaveimage(id,imageUrl)
-                return { success: true, message: "Image uploaded successfully", imageUrl };
+                return { success: true, message: "Image uploaded successfully", imageUrl,saveimage };
             } else {
                 return { success: false, message: "Failed to upload image" };
             }

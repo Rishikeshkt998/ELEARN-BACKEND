@@ -273,17 +273,17 @@ class UserUseCase {
             return { success: false, message: 'Internal server error' };
         }
     }
-    async profilePicUpdate(id: string, imagePath: string) {
+    async profilePicUpdate(id: string, imageUrl: string) {
         try {
         
 
-            const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
-            console.log(imageUrl)
+            // const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
+            // console.log(imageUrl)
             
 
             if (imageUrl) {
                 const saveimage = await this.iuserRepository.saveimage(id, imageUrl)
-                return { success: true, message: "Image uploaded successfully", imageUrl };
+                return { success: true, message: "Image uploaded successfully", imageUrl, saveimage };
             } else {
                 return { success: false, message: "Failed to upload image" };
             }

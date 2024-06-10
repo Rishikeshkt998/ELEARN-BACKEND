@@ -67,7 +67,7 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
 
         const decoded=await Jwt.VerifyJwt(token)
         if (decoded && decoded.role != 'admin') {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" })
         }
         if (decoded && decoded.id) {
             let admin = await repository.findAdminById(decoded.id)
@@ -80,11 +80,11 @@ const adminAuth = async (req: Request, res: Response, next: NextFunction) => {
                 next()
             }
         } else {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" })
         }
     } catch (error) {
         console.log(error)
-        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" })
     }
 }
 

@@ -269,14 +269,14 @@ class UserUseCase {
             }
         });
     }
-    profilePicUpdate(id, imagePath) {
+    profilePicUpdate(id, imageUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const imageUrl = yield this.Cloudinary.savetocloudinary(imagePath);
-                console.log(imageUrl);
+                // const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
+                // console.log(imageUrl)
                 if (imageUrl) {
                     const saveimage = yield this.iuserRepository.saveimage(id, imageUrl);
-                    return { success: true, message: "Image uploaded successfully", imageUrl };
+                    return { success: true, message: "Image uploaded successfully", imageUrl, saveimage };
                 }
                 else {
                     return { success: false, message: "Failed to upload image" };

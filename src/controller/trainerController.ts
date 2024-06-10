@@ -187,14 +187,15 @@ class trainerController {
     async uploadProfilepic(req: Request, res: Response) {
 
         try {
-            const imageFile: Express.Multer.File | undefined = req.file;
-            if (!imageFile) {
-                return res.status(400).json({ success: false, message: 'No image uploaded' });
-            }
+            // const imageFile: Express.Multer.File | undefined = req.file;
+            // if (!imageFile) {
+            //     return res.status(400).json({ success: false, message: 'No image uploaded' });
+            // }
 
-            const imagePath = imageFile.path;
-            const id = req.params.id
-            const Response = await this.trainerCase.trainerProfilePicUpdate(id, imagePath)
+            // const imagePath = imageFile.path;
+            // const id = req.params.id
+            const { trainerId, imageUrl } = req.body;
+            const Response = await this.trainerCase.trainerProfilePicUpdate(trainerId, imageUrl)
             return res.json(Response)
         } catch (error) {
             console.log(error)

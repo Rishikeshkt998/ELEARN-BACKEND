@@ -118,16 +118,10 @@ class userController {
             const googleSigned = await this.userCase.googleSignin(email, name)
             console.log("goo", googleSigned)
             if (googleSigned?.success) {
-                res.cookie('userToken', googleSigned.token, {
-                    expires: new Date(Date.now() + 300000),
-                    sameSite: "none",
-                    secure: true,
-                })
                 res.cookie('refreshToken', googleSigned.Refreshtoken, {
-                    expires: new Date(Date.now() + 25892000000),
                     sameSite: "none",
                     secure: true
-                })
+                }).status(200).json(googleSigned);
                 return res.status(200).json(googleSigned);
             } else if (!googleSigned?.success) {
                 return res.status(200).json({ success: false, message: googleSigned?.message });
@@ -231,14 +225,9 @@ class userController {
     async uploadProfilepic(req: Request, res: Response) {
 
         try {
-            const imageFile: Express.Multer.File | undefined = req.file;
-            if (!imageFile) {
-                return res.status(400).json({ success: false, message: 'No image uploaded' });
-            }
 
-            const imagePath = imageFile.path;
-            const id = req.params.id
-            const Response = await this.userCase.profilePicUpdate(id, imagePath)
+            const { userId, imageUrl } = req.body;
+            const Response = await this.userCase.profilePicUpdate(userId, imageUrl)
             return res.json(Response)
         } catch (error) {
             console.log(error)

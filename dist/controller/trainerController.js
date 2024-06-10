@@ -197,13 +197,14 @@ class trainerController {
     uploadProfilepic(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const imageFile = req.file;
-                if (!imageFile) {
-                    return res.status(400).json({ success: false, message: 'No image uploaded' });
-                }
-                const imagePath = imageFile.path;
-                const id = req.params.id;
-                const Response = yield this.trainerCase.trainerProfilePicUpdate(id, imagePath);
+                // const imageFile: Express.Multer.File | undefined = req.file;
+                // if (!imageFile) {
+                //     return res.status(400).json({ success: false, message: 'No image uploaded' });
+                // }
+                // const imagePath = imageFile.path;
+                // const id = req.params.id
+                const { trainerId, imageUrl } = req.body;
+                const Response = yield this.trainerCase.trainerProfilePicUpdate(trainerId, imageUrl);
                 return res.json(Response);
             }
             catch (error) {

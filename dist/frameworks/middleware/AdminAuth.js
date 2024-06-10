@@ -35,7 +35,7 @@ const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
     try {
         const decoded = yield Jwt.VerifyJwt(token);
         if (decoded && decoded.role != 'admin') {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" });
         }
         if (decoded && decoded.id) {
             let admin = yield repository.findAdminById(decoded.id);
@@ -50,12 +50,12 @@ const adminAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, function
             }
         }
         else {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" });
         }
     }
     catch (error) {
         console.log(error);
-        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" });
+        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from admin" });
     }
 });
 exports.default = adminAuth;

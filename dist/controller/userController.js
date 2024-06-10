@@ -119,16 +119,10 @@ class userController {
                 const googleSigned = yield this.userCase.googleSignin(email, name);
                 console.log("goo", googleSigned);
                 if (googleSigned === null || googleSigned === void 0 ? void 0 : googleSigned.success) {
-                    res.cookie('userToken', googleSigned.token, {
-                        expires: new Date(Date.now() + 300000),
-                        sameSite: "none",
-                        secure: true,
-                    });
                     res.cookie('refreshToken', googleSigned.Refreshtoken, {
-                        expires: new Date(Date.now() + 25892000000),
                         sameSite: "none",
                         secure: true
-                    });
+                    }).status(200).json(googleSigned);
                     return res.status(200).json(googleSigned);
                 }
                 else if (!(googleSigned === null || googleSigned === void 0 ? void 0 : googleSigned.success)) {
@@ -232,13 +226,8 @@ class userController {
     uploadProfilepic(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const imageFile = req.file;
-                if (!imageFile) {
-                    return res.status(400).json({ success: false, message: 'No image uploaded' });
-                }
-                const imagePath = imageFile.path;
-                const id = req.params.id;
-                const Response = yield this.userCase.profilePicUpdate(id, imagePath);
+                const { userId, imageUrl } = req.body;
+                const Response = yield this.userCase.profilePicUpdate(userId, imageUrl);
                 return res.json(Response);
             }
             catch (error) {

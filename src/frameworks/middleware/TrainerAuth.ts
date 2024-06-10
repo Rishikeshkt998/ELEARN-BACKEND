@@ -28,7 +28,7 @@ const TrainerAuth = async (req: Request, res: Response, next: NextFunction) => {
         const decoded = await jwt.VerifyJwt(token)
         console.log("decoded",decoded)
         if (decoded && decoded.role != 'trainer') {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor"})
         }
         if (decoded && decoded.id) {
             let trainer = await repository.findTutorById(decoded.id)
@@ -41,11 +41,11 @@ const TrainerAuth = async (req: Request, res: Response, next: NextFunction) => {
                 next()
             }
         } else {
-            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+            return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor" })
         }
     } catch (error) {
         console.log(error)
-        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token" })
+        return res.status(401).send({ success: false, message: "Unauthorized - Invalid token from tutor" })
     }
 }
 
