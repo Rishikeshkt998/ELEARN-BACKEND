@@ -618,7 +618,7 @@ class courseRepository {
     SearchCourses(search, category, price) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                let query = { isDeleted: false, adminVerified: true, publish: true };
+                let query = { isDeleted: false };
                 if (category) {
                     query.category = category;
                 }
