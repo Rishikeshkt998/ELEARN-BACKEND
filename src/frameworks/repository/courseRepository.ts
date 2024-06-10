@@ -707,7 +707,7 @@ async getTotalCounts() {
     
     async SearchCourses(search?: string, category?: string | null, price?: string | null): Promise<any> {
         try {
-            let query: any = { isDeleted: false, adminVerified: false,publish:true }
+            let query: any = { isDeleted: false, adminVerified: true,publish:true }
 
             if (category) {
                 query.category = category;
