@@ -453,10 +453,10 @@ class userController {
 
     async logout(req: Request, res: Response) {
         try {
-            res.cookie("userToken", "", {
-                httpOnly: true,
-                expires: new Date(0)
-            });
+            res.cookie('refreshToken', "", {
+                sameSite: "none",
+                secure: true
+            })
             res.cookie("courseId", "", {
                 httpOnly: true,
                 expires: new Date(0)

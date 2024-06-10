@@ -467,9 +467,9 @@ class userController {
     logout(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                res.cookie("userToken", "", {
-                    httpOnly: true,
-                    expires: new Date(0)
+                res.cookie('refreshToken', "", {
+                    sameSite: "none",
+                    secure: true
                 });
                 res.cookie("courseId", "", {
                     httpOnly: true,
