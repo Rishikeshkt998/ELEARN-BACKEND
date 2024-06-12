@@ -9,6 +9,11 @@ const messageSchema: Schema<Message> = new Schema({
     senderId: {
         type: String,
     },
+    contentType: {
+        type: String,
+        enum: ['video', 'image', 'file', 'text'],
+        default: 'text'
+    },
     message: {
         type: String,
     },
@@ -16,6 +21,12 @@ const messageSchema: Schema<Message> = new Schema({
         type: Date,
         default: Date.now,
     },
+    status: 
+    { 
+        type: String, 
+        enum: ['read', 'unread'], 
+        default: 'unread' 
+    }
 });
 
 const messageModel = mongoose.model<Message>('message', messageSchema);

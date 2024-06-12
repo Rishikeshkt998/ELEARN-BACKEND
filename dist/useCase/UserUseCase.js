@@ -83,7 +83,7 @@ class UserUseCase {
                 return { success: true, message: 'Signup successful..!', updated };
             }
             else {
-                return { success: false, message: 'email is not verified' };
+                return { success: false, message: 'invalid otp' };
             }
         });
     }

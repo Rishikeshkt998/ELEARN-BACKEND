@@ -1,4 +1,5 @@
 import { Server, Socket } from "socket.io";
+import { messageModel } from "../database/messageModel";
 
 interface User {
     userId: string,
@@ -35,18 +36,34 @@ function socketServer(server: any) {
 
         })
 
-        socket.on("sendMessage",({senderId,recieverId,message})=>{
+        socket.on("sendMessage",({senderId,recieverId,message,contentType,status})=>{
             const user = getUser(recieverId)
             if (user) {
                 io.to(user.socketId).emit("getMessage", {
                     senderId: senderId,
                     message: message,
+                    contentType:contentType,
+                    status:status
 
                 });
             }
             
 
         })
+        socket.on("markMessageAsRead", async ({ messageId, userId }) => {
+            try {
+                await messageModel.findByIdAndUpdate(messageId, { status: 'read' });
+                const user = getUser(userId);
+                if (user) {
+                    io.to(user.socketId).emit("messageRead", {
+                        messageId: messageId,
+                        userId: userId
+                    });
+                }
+            } catch (error) {
+                console.error('Error marking message as read:', error);
+            }
+        });
         socket.on('disconnect', () => {
             console.log("a user disconnected")
                 removeUser(socket.id)

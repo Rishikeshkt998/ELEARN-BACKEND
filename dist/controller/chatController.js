@@ -72,6 +72,25 @@ class chatController {
             }
         });
     }
+    MakeasRead(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const id = req.params.id;
+                console.log("body", id);
+                const readMessage = yield this.chatCase.readMessage(id);
+                if (readMessage === null || readMessage === void 0 ? void 0 : readMessage.success) {
+                    res.status(200).json({ success: true, data: readMessage.data });
+                }
+                else if (!(readMessage === null || readMessage === void 0 ? void 0 : readMessage.success)) {
+                    res.status(200).json({ success: false, message: 'Something went wrong..' });
+                }
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).json({ success: false, message: "Internal server error" });
+            }
+        });
+    }
     getMessages(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

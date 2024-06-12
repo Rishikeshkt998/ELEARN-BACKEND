@@ -77,6 +77,22 @@ class chatUseCase {
             }
         });
     }
+    readMessage(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const readMessage = yield this.iChatRepository.ReadMessage(id);
+                if (readMessage) {
+                    return { success: true, data: readMessage };
+                }
+                else {
+                    return { success: false };
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     findTutorById(userId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

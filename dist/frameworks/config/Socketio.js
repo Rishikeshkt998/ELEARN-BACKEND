@@ -1,6 +1,16 @@
 "use strict";
+var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, generator) {
+    function adopt(value) { return value instanceof P ? value : new P(function (resolve) { resolve(value); }); }
+    return new (P || (P = Promise))(function (resolve, reject) {
+        function fulfilled(value) { try { step(generator.next(value)); } catch (e) { reject(e); } }
+        function rejected(value) { try { step(generator["throw"](value)); } catch (e) { reject(e); } }
+        function step(result) { result.done ? resolve(result.value) : adopt(result.value).then(fulfilled, rejected); }
+        step((generator = generator.apply(thisArg, _arguments || [])).next());
+    });
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const socket_io_1 = require("socket.io");
+const messageModel_1 = require("../database/messageModel");
 function socketServer(server) {
     const io = new socket_io_1.Server(server, {
         cors: {
@@ -25,15 +35,32 @@ function socketServer(server) {
             addUser(userId, socket.id);
             io.emit("getUsers", users);
         });
-        socket.on("sendMessage", ({ senderId, recieverId, message }) => {
+        socket.on("sendMessage", ({ senderId, recieverId, message, contentType, status }) => {
             const user = getUser(recieverId);
             if (user) {
                 io.to(user.socketId).emit("getMessage", {
                     senderId: senderId,
                     message: message,
+                    contentType: contentType,
+                    status: status
                 });
             }
         });
+        socket.on("markMessageAsRead", (_a) => __awaiter(this, [_a], void 0, function* ({ messageId, userId }) {
+            try {
+                yield messageModel_1.messageModel.findByIdAndUpdate(messageId, { status: 'read' });
+                const user = getUser(userId);
+                if (user) {
+                    io.to(user.socketId).emit("messageRead", {
+                        messageId: messageId,
+                        userId: userId
+                    });
+                }
+            }
+            catch (error) {
+                console.error('Error marking message as read:', error);
+            }
+        }));
         socket.on('disconnect', () => {
             console.log("a user disconnected");
             removeUser(socket.id);

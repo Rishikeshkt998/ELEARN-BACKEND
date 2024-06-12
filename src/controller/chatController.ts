@@ -52,6 +52,21 @@ class chatController {
             res.status(500).json({ success: false, message: "Internal server error" });
         }
     }
+    async MakeasRead(req: Request, res: Response) {
+        try {
+            const id=req.params.id;
+            console.log("body",id)
+            const readMessage = await this.chatCase.readMessage(id)
+            if (readMessage?.success) {
+                res.status(200).json({ success: true, data: readMessage.data })
+            } else if (!readMessage?.success) {
+                res.status(200).json({ success: false, message: 'Something went wrong..' })
+            }
+        } catch (error) {
+            console.log(error)
+            res.status(500).json({ success: false, message: "Internal server error" });
+        }
+    }
 
 
     async getMessages(req: Request, res: Response) {

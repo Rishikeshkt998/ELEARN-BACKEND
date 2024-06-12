@@ -7,6 +7,8 @@ interface Message {
     senderId: string,
     message: string,
     creationTime: Date
+    contentType?:string
+    status?:string
 }
 
 export default Message;

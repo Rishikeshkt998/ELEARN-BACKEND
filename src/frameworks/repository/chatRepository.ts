@@ -37,6 +37,25 @@ class chatRepository implements IchatRepository {
             console.log(error)
         }
     }
+    async ReadMessage(id: any): Promise<any> {
+        try {
+            console.log("idvalue",id)
+            const message = await messageModel.findById(id);
+            // if (!message) {
+            //     throw new Error('Message not found');
+            // }
+            if(message){
+                message.status = 'read';
+                await message.save();
+
+            }
+            
+
+            return message;
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     async addImageMessage(conversationId: string, sellerId: string, image: string): Promise<any> {
         try {
@@ -118,9 +137,9 @@ class chatRepository implements IchatRepository {
             const user = await userModel.aggregate([
                 {
                     $lookup: {
-                        from: "messages",
+                        from: "message",
                         localField: "_id",
-                        foreignField: "senderId",
+                        foreignField:"senderId",
                         as: "latestMessage"
                     }
                 },

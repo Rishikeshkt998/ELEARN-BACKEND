@@ -10,6 +10,7 @@ interface IchatRepository {
     findUserById(userId: string): Promise<any>,
     getMessages(conversationId: string): Promise<any>,
     addMessage(data: Message): Promise<any>,
+    ReadMessage(id:any):Promise<any>,
     addImageMessage(conversationId: string, sellerId: string, image: string): Promise<any>,
     findTutorForchat(): Promise<Trainer[]>
     findUserForChat(): Promise<User[]>

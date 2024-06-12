@@ -43,6 +43,12 @@ class userController {
             try {
                 const userOtp = req.body;
                 const saveUser = yield this.userCase.VerifyUser(userOtp.otp, userOtp.id);
+                if (saveUser === null || saveUser === void 0 ? void 0 : saveUser.success) {
+                    return res.status(200).json({ success: true, message: saveUser });
+                }
+                else if (!(saveUser === null || saveUser === void 0 ? void 0 : saveUser.success)) {
+                    return res.status(200).json({ success: false, message: saveUser === null || saveUser === void 0 ? void 0 : saveUser.message });
+                }
                 res.json(saveUser);
             }
             catch (error) {

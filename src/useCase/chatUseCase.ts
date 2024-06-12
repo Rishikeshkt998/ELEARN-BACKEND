@@ -69,6 +69,18 @@ class chatUseCase {
             console.log(error)
         }
     }
+    async readMessage(id:any) {
+        try {
+            const readMessage = await this.iChatRepository.ReadMessage(id)
+            if (readMessage) {
+                return { success: true, data: readMessage }
+            } else {
+                return { success: false }
+            }
+        } catch (error) {
+            console.log(error)
+        }
+    }
 
     
     async findTutorById(userId: string) {

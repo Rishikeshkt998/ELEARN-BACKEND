@@ -43,6 +43,25 @@ class chatRepository {
             }
         });
     }
+    ReadMessage(id) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("idvalue", id);
+                const message = yield messageModel_1.messageModel.findById(id);
+                // if (!message) {
+                //     throw new Error('Message not found');
+                // }
+                if (message) {
+                    message.status = 'read';
+                    yield message.save();
+                }
+                return message;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     addImageMessage(conversationId, sellerId, image) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -137,7 +156,7 @@ class chatRepository {
                 const user = yield userModel_1.userModel.aggregate([
                     {
                         $lookup: {
-                            from: "messages",
+                            from: "message",
                             localField: "_id",
                             foreignField: "senderId",
                             as: "latestMessage"
