@@ -60,6 +60,10 @@ const trainerSchema = new mongoose_1.Schema({
         type: Boolean,
         default: false
     },
+    isVerifiedUser: {
+        type: Boolean,
+        default: false
+    },
     creationTime: {
         type: Date,
     }

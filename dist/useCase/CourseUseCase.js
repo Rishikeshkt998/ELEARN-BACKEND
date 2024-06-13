@@ -441,6 +441,17 @@ class courseUseCase {
             }
         });
     }
+    removeQuestion(questionId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.IcourseRepository.removeQuestion(questionId, courseId);
+                return { response };
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     getEnrolledCourse(id, usersId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

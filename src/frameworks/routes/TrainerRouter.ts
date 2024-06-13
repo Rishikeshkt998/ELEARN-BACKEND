@@ -62,6 +62,7 @@ router.post('/publish/:id', (req, res) => CourseController.publishCourse(req, re
 router.post('/addchapter', (req, res) => CourseController.addChapter(req, res))
 router.post('/deletecourse/:id', (req, res) => CourseController.DeleteCourses(req, res))
 router.post('/question', (req, res) => CourseController.QuestionAdd(req, res))
+router.delete('/removequestion', (req, res) => CourseController.removeQuestion(req, res));
 router.get('/getquestion/:id', (req, res) => CourseController.GetQuestion(req, res))
 router.get('/fetchreviews/:id', (req, res) => CourseController.getReviews(req, res))
 router.post('/commentreply', (req, res) => CourseController.addReply(req, res))

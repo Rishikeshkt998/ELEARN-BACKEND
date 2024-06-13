@@ -9,6 +9,7 @@ interface Trainer {
     otp?: string;
     isBlocked?: boolean,
     isVerified?:boolean,
+    isVerifiedUser?:boolean
     creationTime?: Date,
 
 }

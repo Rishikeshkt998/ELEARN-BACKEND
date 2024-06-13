@@ -19,7 +19,12 @@ class trainerController {
             try {
                 let trainerData = req.body;
                 const trainer = yield this.trainerCase.TrainerSignUp(trainerData);
-                res.json(trainer);
+                if (trainer === null || trainer === void 0 ? void 0 : trainer.success) {
+                    return res.status(200).json({ success: true, trainer });
+                }
+                else if (!(trainer === null || trainer === void 0 ? void 0 : trainer.success)) {
+                    return res.status(200).json({ success: false, message: trainer === null || trainer === void 0 ? void 0 : trainer.message });
+                }
             }
             catch (error) {
                 console.log('signup error : ', error);
@@ -37,7 +42,6 @@ class trainerController {
                 else if (!(saveTutor === null || saveTutor === void 0 ? void 0 : saveTutor.success)) {
                     return res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false, message: saveTutor === null || saveTutor === void 0 ? void 0 : saveTutor.message });
                 }
-                // res.json(saveTutor)
             }
             catch (error) {
                 console.log(error);
@@ -86,7 +90,12 @@ class trainerController {
             try {
                 const { email } = req.body;
                 const forgot = yield this.trainerCase.forgotPasswordTutor(email);
-                return res.json(forgot);
+                if (forgot === null || forgot === void 0 ? void 0 : forgot.success) {
+                    return res.status(200).json(forgot);
+                }
+                else if (!(forgot === null || forgot === void 0 ? void 0 : forgot.success)) {
+                    return res.status(200).json({ success: false, message: forgot === null || forgot === void 0 ? void 0 : forgot.message });
+                }
             }
             catch (error) {
                 console.log(error);
@@ -99,11 +108,11 @@ class trainerController {
             try {
                 const { email, otp } = req.body;
                 const verifyforgott = yield this.trainerCase.VerifyforgotTutor(email, otp);
-                if (verifyforgott) {
+                if (verifyforgott.success) {
                     res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: true, verifyforgott });
                 }
-                else {
-                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false });
+                else if (!verifyforgott.success) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false, message: verifyforgott.message });
                 }
             }
             catch (error) {
@@ -116,7 +125,13 @@ class trainerController {
             try {
                 const { email, newpassword, confirmpassword } = req.body;
                 const updatepassword = yield this.trainerCase.changePasswordTutor(email, newpassword, confirmpassword);
-                res.json(updatepassword);
+                // res.json(updatepassword)
+                if (updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.success) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: true, updatepassword });
+                }
+                else if (!(updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.success)) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false, message: updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.message });
+                }
             }
             catch (error) {
                 console.log(error);

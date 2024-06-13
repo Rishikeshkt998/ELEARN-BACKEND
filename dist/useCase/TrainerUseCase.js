@@ -50,6 +50,7 @@ class TrainerUseCase {
     }
     VerifyTutor(otp, tutorId) {
         return __awaiter(this, void 0, void 0, function* () {
+            console.log("tutorid", tutorId);
             const tutorData = yield this.ItrainerRepository.findTutorById(tutorId);
             if (otp === (tutorData === null || tutorData === void 0 ? void 0 : tutorData.otp)) {
                 const updated = yield this.ItrainerRepository.verifyTutor(tutorId);
@@ -104,13 +105,19 @@ class TrainerUseCase {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const trainerfind = yield this.ItrainerRepository.findTrainerByEmail(email);
+                console.log(trainerfind);
+                if (!trainerfind) {
+                    return { success: false, message: 'Email not found' };
+                }
                 if ((trainerfind === null || trainerfind === void 0 ? void 0 : trainerfind.isVerified) === false) {
                     return { success: false, message: 'tutor is not verified by the admin' };
                 }
-                const otp = yield this.GenerateOtp.generateOtp(4);
-                const sendmail = this.sendMail.SendMail(email, email, otp);
-                const update = yield this.ItrainerRepository.updateTutor(email, otp);
-                return { success: true, email, otp };
+                else {
+                    const otp = yield this.GenerateOtp.generateOtp(4);
+                    const sendmail = this.sendMail.SendMail(email, email, otp);
+                    const update = yield this.ItrainerRepository.updateTutor(email, otp);
+                    return { success: true, email, otp };
+                }
             }
             catch (error) {
                 console.log(error);
@@ -123,7 +130,7 @@ class TrainerUseCase {
                 console.log("email", email, otp);
                 const tutorData = yield this.ItrainerRepository.findByEmailTutor(email);
                 if (!tutorData) {
-                    throw new Error('User not found');
+                    return { success: false, message: "user not found" };
                 }
                 if (tutorData.otp === otp) {
                     return { success: true, message: "Password successfully verified with OTP" };

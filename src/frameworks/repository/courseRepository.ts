@@ -432,6 +432,24 @@ class courseRepository implements IcourseRepository {
             throw error;
         }
     }
+    async removeQuestion(
+        questionId: string,
+        courseId: string
+    ): Promise< any> {
+        try {
+            await questionModel.findOneAndDelete({ _id: questionId });
+            const removed = await courseModel.findOneAndUpdate(
+                { _id: courseId },
+                {
+                    $pull: { questions: questionId },
+                },
+                { new: true }
+            );
+            return removed;
+        } catch (error) {
+            throw error;
+        }
+    }
 
 
 async CourseDataforAnalysis(){

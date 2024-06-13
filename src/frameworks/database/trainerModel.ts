@@ -44,6 +44,12 @@ const trainerSchema: Schema<Trainer> = new Schema({
         default:false
 
     },
+    isVerifiedUser:{
+        type: Boolean,
+        default: false
+
+
+    },
     creationTime:{
         type: Date,
     }

@@ -393,6 +393,17 @@ class courseUseCase {
 
         }
     }
+    async removeQuestion(questionId: string, courseId: string) {
+        try {
+            const response = await this.IcourseRepository.removeQuestion(
+                questionId,
+                courseId
+            );
+            return { response };
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async getEnrolledCourse(id: string,usersId:string) {
         try {
             const EnrolledCourses = await this.IcourseRepository.findEnrolledCourses(id,usersId)

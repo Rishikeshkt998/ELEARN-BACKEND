@@ -472,6 +472,20 @@ class courseController {
             }
         });
     }
+    removeQuestion(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const courseId = req.query.courseId;
+                const questionId = req.query.questionId;
+                console.log("values", courseId, questionId);
+                const response = yield this.courseCase.removeQuestion(questionId, courseId);
+                res.status(200).json(response);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     GetEnrolled(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

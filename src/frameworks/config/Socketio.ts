@@ -1,5 +1,6 @@
 import { Server, Socket } from "socket.io";
 import { messageModel } from "../database/messageModel";
+import { conversationModel } from "../database/conversationModel";
 
 interface User {
     userId: string,
@@ -36,7 +37,13 @@ function socketServer(server: any) {
 
         })
 
-        socket.on("sendMessage",({senderId,recieverId,message,contentType,status})=>{
+        socket.on("sendMessage", async({senderId,recieverId,message,contentType,status})=>{
+            const conversation = await conversationModel.findOneAndUpdate(
+                { members: { $all: [senderId, recieverId] } },
+                { updationTime: new Date() },
+                { new: true } 
+            );
+            console.log(conversation)
             const user = getUser(recieverId)
             if (user) {
                 io.to(user.socketId).emit("getMessage", {

@@ -11,6 +11,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
 Object.defineProperty(exports, "__esModule", { value: true });
 const socket_io_1 = require("socket.io");
 const messageModel_1 = require("../database/messageModel");
+const conversationModel_1 = require("../database/conversationModel");
 function socketServer(server) {
     const io = new socket_io_1.Server(server, {
         cors: {
@@ -35,7 +36,9 @@ function socketServer(server) {
             addUser(userId, socket.id);
             io.emit("getUsers", users);
         });
-        socket.on("sendMessage", ({ senderId, recieverId, message, contentType, status }) => {
+        socket.on("sendMessage", (_a) => __awaiter(this, [_a], void 0, function* ({ senderId, recieverId, message, contentType, status }) {
+            const conversation = yield conversationModel_1.conversationModel.findOneAndUpdate({ members: { $all: [senderId, recieverId] } }, { updationTime: new Date() }, { new: true });
+            console.log(conversation);
             const user = getUser(recieverId);
             if (user) {
                 io.to(user.socketId).emit("getMessage", {
@@ -45,8 +48,8 @@ function socketServer(server) {
                     status: status
                 });
             }
-        });
-        socket.on("markMessageAsRead", (_a) => __awaiter(this, [_a], void 0, function* ({ messageId, userId }) {
+        }));
+        socket.on("markMessageAsRead", (_b) => __awaiter(this, [_b], void 0, function* ({ messageId, userId }) {
             try {
                 yield messageModel_1.messageModel.findByIdAndUpdate(messageId, { status: 'read' });
                 const updatedMessage = yield messageModel_1.messageModel.findById(messageId);

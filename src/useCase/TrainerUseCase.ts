@@ -64,6 +64,7 @@ class TrainerUseCase {
         }
     }
     async VerifyTutor(otp: string, tutorId: string) {
+        console.log("tutorid",tutorId)
         const tutorData: any = await this.ItrainerRepository.findTutorById(tutorId)
         if (otp === tutorData?.otp) {
             const updated = await this.ItrainerRepository.verifyTutor(tutorId)
@@ -118,15 +119,24 @@ class TrainerUseCase {
     }
     async forgotPasswordTutor(email: string) {
         try {
+            
+
             const trainerfind = await this.ItrainerRepository.findTrainerByEmail(email)
+            console.log(trainerfind)
+            if (!trainerfind) {
+                return { success: false, message: 'Email not found' };
+            }
             if(trainerfind?.isVerified===false){
                 return { success: false, message: 'tutor is not verified by the admin' }
 
+            }else{
+                const otp = await this.GenerateOtp.generateOtp(4)
+                const sendmail = this.sendMail.SendMail(email, email, otp)
+                const update = await this.ItrainerRepository.updateTutor(email, otp)
+                return { success: true, email, otp }
+
             }
-            const otp = await this.GenerateOtp.generateOtp(4)
-            const sendmail = this.sendMail.SendMail(email, email, otp)
-            const update = await this.ItrainerRepository.updateTutor(email, otp)
-            return { success: true, email, otp }
+            
 
 
 
@@ -140,12 +150,9 @@ class TrainerUseCase {
     async VerifyforgotTutor(email: string, otp: "string") {
         try {
             console.log("email",email,otp)
-
             const tutorData: Trainer | null = await this.ItrainerRepository.findByEmailTutor(email);
-
-
             if (!tutorData) {
-                throw new Error('User not found');
+                return { success: false , message: "user not found" };
             }
 
             if (tutorData.otp === otp) {

@@ -399,6 +399,20 @@ class courseRepository {
             }
         });
     }
+    removeQuestion(questionId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield questionModel_1.questionModel.findOneAndDelete({ _id: questionId });
+                const removed = yield courseModel_1.courseModel.findOneAndUpdate({ _id: courseId }, {
+                    $pull: { questions: questionId },
+                }, { new: true });
+                return removed;
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
     CourseDataforAnalysis() {
         return __awaiter(this, void 0, void 0, function* () {
             try {

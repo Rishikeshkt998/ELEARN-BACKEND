@@ -17,7 +17,12 @@ class trainerController {
 
             let trainerData = req.body
             const trainer = await this.trainerCase.TrainerSignUp(trainerData)
-            res.json(trainer)
+            if (trainer?.success) {
+                return res.status(200).json({ success: true, trainer });
+
+            } else if (!trainer?.success) {
+                return res.status(200).json({ success: false, message: trainer?.message });
+            }
 
 
         } catch (error) {
@@ -34,7 +39,6 @@ class trainerController {
             } else if (!saveTutor?.success) {
                 return res.status(HTTP_STATUS_OK).json({ success: false, message: saveTutor?.message });
             }
-            // res.json(saveTutor)
         } catch (error) {
             console.log(error)
             return res.status(500).json({ success: false, message: "Internal server error!" });
@@ -79,7 +83,11 @@ class trainerController {
         try {
             const { email } = req.body
             const forgot = await this.trainerCase.forgotPasswordTutor(email)
-             return res.json(forgot)
+            if (forgot?.success) {
+                return res.status(200).json(forgot);
+            } else if (!forgot?.success) {
+                return res.status(200).json({ success: false, message: forgot?.message });
+            }
                 
         
         } catch (error) {
@@ -91,11 +99,11 @@ class trainerController {
         try {
             const { email, otp } = req.body
             const verifyforgott = await this.trainerCase.VerifyforgotTutor(email, otp)
-            if (verifyforgott) {
+            if (verifyforgott.success) {
                 res.status(HTTP_STATUS_OK).json({ success: true, verifyforgott });
 
-            } else {
-                res.status(HTTP_STATUS_OK).json({ success: false });
+            } else if (!verifyforgott.success) {
+                res.status(HTTP_STATUS_OK).json({ success: false, message:verifyforgott.message });
             }
 
 
@@ -109,7 +117,14 @@ class trainerController {
         try {
             const { email, newpassword, confirmpassword } = req.body
             const updatepassword = await this.trainerCase.changePasswordTutor(email, newpassword, confirmpassword)
-            res.json(updatepassword)
+            // res.json(updatepassword)
+            if (updatepassword?.success) {
+                res.status(HTTP_STATUS_OK).json({ success: true, updatepassword });
+
+            } else if (!updatepassword?.success) {
+                res.status(HTTP_STATUS_OK).json({ success: false, message: updatepassword?.message });
+            }
+
 
         } catch (error) {
             console.log(error)

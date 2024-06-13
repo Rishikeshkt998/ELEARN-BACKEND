@@ -26,11 +26,16 @@ class userController {
             try {
                 const userData = req.body;
                 const user = yield this.userCase.signupUser(userData);
-                if (user) {
-                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: true, user });
+                // if (user) {
+                //     res.status(HTTP_STATUS_OK).json({ success: true, user });
+                // } else {
+                //     res.status(200).json({ success: false });
+                // }
+                if (user === null || user === void 0 ? void 0 : user.success) {
+                    return res.status(200).json({ success: true, user });
                 }
-                else {
-                    res.status(200).json({ success: false });
+                else if (!(user === null || user === void 0 ? void 0 : user.success)) {
+                    return res.status(200).json({ success: false, message: user === null || user === void 0 ? void 0 : user.message });
                 }
             }
             catch (error) {
@@ -82,7 +87,13 @@ class userController {
             try {
                 const { email } = req.body;
                 const forgot = yield this.userCase.forgotPassword(email);
-                res.json(forgot);
+                if (forgot === null || forgot === void 0 ? void 0 : forgot.success) {
+                    return res.status(200).json({ success: true, forgot });
+                }
+                else if (!(forgot === null || forgot === void 0 ? void 0 : forgot.success)) {
+                    return res.status(200).json({ success: false, message: forgot === null || forgot === void 0 ? void 0 : forgot.message });
+                }
+                // res.json(forgot)
             }
             catch (error) {
                 console.log(error);
@@ -94,12 +105,17 @@ class userController {
             try {
                 const { email, otp } = req.body;
                 const verifyforgott = yield this.userCase.VerifyforgotUser(email, otp);
-                if (verifyforgott) {
+                if (verifyforgott.success) {
                     res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: true, verifyforgott });
                 }
-                else {
-                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false });
+                else if (!verifyforgott.success) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false, message: verifyforgott.message });
                 }
+                // if (verifyforgott) {
+                //     res.status(HTTP_STATUS_OK).json({ success: true, verifyforgott });
+                // } else {
+                //     res.status(HTTP_STATUS_OK).json({ success: false });
+                // }
             }
             catch (error) {
                 console.log(error);
@@ -111,7 +127,13 @@ class userController {
             try {
                 const { email, newpassword, confirmpassword } = req.body;
                 const updatepassword = yield this.userCase.changePass(email, newpassword, confirmpassword);
-                res.json(updatepassword);
+                // res.json(updatepassword)
+                if (updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.success) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: true, updatepassword });
+                }
+                else if (!(updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.success)) {
+                    res.status(HTTPstatus_1.HTTP_STATUS_OK).json({ success: false, message: updatepassword === null || updatepassword === void 0 ? void 0 : updatepassword.message });
+                }
             }
             catch (error) {
                 console.log(error);

@@ -74,7 +74,7 @@ class trainerRepository {
             try {
                 const update = yield trainerModel_1.trainerModel.updateOne({ _id: tutorId }, {
                     $set: {
-                        isVerified: true
+                        isVerifiedUser: true
                     }
                 });
                 return update;

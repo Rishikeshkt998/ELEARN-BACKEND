@@ -437,6 +437,21 @@ class courseController {
 
         }
     }
+    async removeQuestion(req: Request, res: Response) {
+        try {
+            
+            const courseId = req.query.courseId as string;
+            const questionId = req.query.questionId as string ;
+            console.log("values",courseId, questionId)
+            const response = await this.courseCase.removeQuestion(
+                questionId,
+                courseId
+            );
+            res.status(200).json(response);
+        } catch (error) {
+            console.log(error);
+        }
+    }
     async GetEnrolled(req: Request, res: Response) {
         try {
             const id = req.params.id

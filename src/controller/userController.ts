@@ -28,16 +28,18 @@ class userController {
         try {
             const userData = req.body
             const user = await this.userCase.signupUser(userData)
-            if (user) {
-                res.status(HTTP_STATUS_OK).json({ success: true, user });
-            } else {
-                res.status(200).json({ success: false });
+            // if (user) {
+            //     res.status(HTTP_STATUS_OK).json({ success: true, user });
+            // } else {
+            //     res.status(200).json({ success: false });
 
+            // }
+            if (user?.success) {
+                return res.status(200).json({ success: true, user });
+
+            } else if (!user?.success) {
+                return res.status(200).json({ success: false, message: user?.message });
             }
-
-
-
-
         } catch (error) {
             console.log('signup error : ', error);
 
@@ -81,7 +83,12 @@ class userController {
         try {
             const { email } = req.body
             const forgot = await this.userCase.forgotPassword(email)
-            res.json(forgot)
+            if (forgot?.success) {
+                return res.status(200).json({ success:true,forgot});
+            } else if (!forgot?.success) {
+                return res.status(200).json({ success: false, message: forgot?.message });
+            }
+            // res.json(forgot)
 
 
         } catch (error) {
@@ -92,12 +99,19 @@ class userController {
         try {
             const { email, otp } = req.body
             const verifyforgott = await this.userCase.VerifyforgotUser(email, otp)
-            if (verifyforgott) {
+            if (verifyforgott.success) {
                 res.status(HTTP_STATUS_OK).json({ success: true, verifyforgott });
 
-            } else {
-                res.status(HTTP_STATUS_OK).json({ success: false });
+            } else if (!verifyforgott.success) {
+                res.status(HTTP_STATUS_OK).json({ success: false, message: verifyforgott.message });
             }
+
+            // if (verifyforgott) {
+            //     res.status(HTTP_STATUS_OK).json({ success: true, verifyforgott });
+
+            // } else {
+            //     res.status(HTTP_STATUS_OK).json({ success: false });
+            // }
 
 
 
@@ -110,7 +124,14 @@ class userController {
         try {
             const { email, newpassword, confirmpassword } = req.body
             const updatepassword = await this.userCase.changePass(email, newpassword, confirmpassword)
-            res.json(updatepassword)
+            // res.json(updatepassword)
+            if (updatepassword?.success) {
+                res.status(HTTP_STATUS_OK).json({ success: true, updatepassword });
+
+            } else if (!updatepassword?.success) {
+                res.status(HTTP_STATUS_OK).json({ success: false, message: updatepassword?.message });
+            }
+
 
         } catch (error) {
             console.log(error)

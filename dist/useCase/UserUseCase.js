@@ -50,10 +50,10 @@ class UserUseCase {
                 console.log(token);
                 const saveUser = yield this.iuserRepository.saveUser(user);
                 if (saveUser) {
-                    return { status: 200, message: "Signup successful", data: saveUser };
+                    return { status: 200, success: true, message: "Signup successful", data: saveUser };
                 }
                 else {
-                    return { status: 500, message: "Failed to save user data" };
+                    return { status: 500, success: false, message: "Failed to save user data" };
                 }
             }
             catch (error) {
@@ -117,10 +117,17 @@ class UserUseCase {
     forgotPassword(email) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const otp = yield this.GenerateOtp.generateOtp(4);
-                const sendmail = this.sendMail.SendMail(email, email, otp);
-                const update = yield this.iuserRepository.updateUser(email, otp);
-                return { success: true, email, otp };
+                const userfind = yield this.iuserRepository.findByEmail(email);
+                console.log("finded user", userfind);
+                if (!userfind) {
+                    return { success: false, message: 'Email not found' };
+                }
+                else {
+                    const otp = yield this.GenerateOtp.generateOtp(4);
+                    const sendmail = this.sendMail.SendMail(email, email, otp);
+                    const update = yield this.iuserRepository.updateUser(email, otp);
+                    return { success: true, email, otp };
+                }
             }
             catch (error) {
                 console.log(error);
@@ -132,7 +139,7 @@ class UserUseCase {
             try {
                 const userData = yield this.iuserRepository.findByEmail(email);
                 if (!userData) {
-                    throw new Error('User not found');
+                    return { success: true, message: "user not found" };
                 }
                 if (userData.otp === otp) {
                     return { success: true, message: "Password successfully verified with OTP" };
@@ -176,9 +183,7 @@ class UserUseCase {
                         return { success: false, message: "user has been blocked by the user" };
                     }
                     const token = yield this.JwtToken.SignJwt(userData._id, "user");
-                    // const token = await this.JwtToken.SignJwt(userData);
                     const Refreshtoken = yield this.JwtToken.refreshToken(userData._id, "user");
-                    // const Refreshtoken = await this.JwtToken.refreshToken(userData)
                     const { password } = userData, rest = __rest(userData, ["password"]);
                     return { success: true, userData: userData, token: token, Refreshtoken: Refreshtoken };
                 }
@@ -193,13 +198,11 @@ class UserUseCase {
                         phone: phone
                     };
                     const newuser = yield this.iuserRepository.saveUser(user);
+                    console.log("new user", newuser);
                     const uservalue = yield this.iuserRepository.verifyGoogleUser(email);
-                    yield this.iuserRepository.verifyUser(email);
                     const token = yield this.JwtToken.SignJwt(uservalue._id, "user");
-                    // const token = await this.JwtToken.SignJwt(uservalue);
                     const Refreshtoken = yield this.JwtToken.refreshToken(uservalue._id, "user");
-                    // const Refreshtoken = await this.JwtToken.refreshToken(uservalue)
-                    return { success: true, userData: uservalue, token: token, Refreshtoken: Refreshtoken };
+                    return { success: true, message: 'login successfull!', userData: uservalue, token: token, Refreshtoken: Refreshtoken };
                 }
             }
             catch (error) {
@@ -272,8 +275,6 @@ class UserUseCase {
     profilePicUpdate(id, imageUrl) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                // const imageUrl = await this.Cloudinary.savetocloudinary(imagePath)
-                // console.log(imageUrl)
                 if (imageUrl) {
                     const saveimage = yield this.iuserRepository.saveimage(id, imageUrl);
                     return { success: true, message: "Image uploaded successfully", imageUrl, saveimage };

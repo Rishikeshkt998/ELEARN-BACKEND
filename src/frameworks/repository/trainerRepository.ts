@@ -63,7 +63,7 @@ class trainerRepository implements ItrainerRepository {
         try {
             const update = await trainerModel.updateOne({ _id: tutorId }, {
                 $set: {
-                    isVerified: true
+                    isVerifiedUser: true
                 }
             })
             return update

@@ -16,7 +16,7 @@ import chatModel from "../database/chatModel";
 class chatRepository implements IchatRepository {
     async getMessages(conversationId: string): Promise<any> {
         try {
-            const messages = await messageModel.find({conversationId: conversationId })
+            const messages = await messageModel.find({ conversationId: conversationId })
             if (messages) {
                 return messages
             } else {
@@ -31,7 +31,6 @@ class chatRepository implements IchatRepository {
         try {
             const newMessage = new messageModel(data);
             await newMessage.save()
-            // const conversation = await conversationModel.updateOne({ _id: data.conversationId }, { updationTime: Date.now() })
             return newMessage
         } catch (error) {
             console.log(error)
@@ -39,17 +38,14 @@ class chatRepository implements IchatRepository {
     }
     async ReadMessage(id: any): Promise<any> {
         try {
-            console.log("idvalue",id)
+            console.log("idvalue", id)
             const message = await messageModel.findById(id);
-            // if (!message) {
-            //     throw new Error('Message not found');
-            // }
-            if(message){
+            if (message) {
                 message.status = 'read';
                 await message.save();
 
             }
-            
+
 
             return message;
         } catch (error) {
@@ -85,7 +81,7 @@ class chatRepository implements IchatRepository {
         }
     }
 
-    async getConversations(userId:string,tutorId: string): Promise<any> {
+    async getConversations(userId: string, tutorId: string): Promise<any> {
         try {
             const conversations = await conversationModel.find({ members: { $all: [userId, tutorId] } })
             if (conversations) {
@@ -106,7 +102,7 @@ class chatRepository implements IchatRepository {
             console.log(error)
         }
     }
-    async findUserById(userId: string): Promise<any> {  
+    async findUserById(userId: string): Promise<any> {
         try {
             const findUserById = await userModel.findById(userId)
             return findUserById
@@ -114,40 +110,85 @@ class chatRepository implements IchatRepository {
             console.log(error)
         }
     }
+
     async findTutorForchat(): Promise<Trainer[]> {
-        const trainerData: (Trainer & { _id: ObjectId })[] = await trainerModel.find()
-        const findedtrainer: Trainer[] = trainerData.map((trainer) => ({
-            id: trainer._id,
-            name: trainer.name,
-            email: trainer.email,
-            image:trainer.image,
-            password: trainer.password,
-            phone: trainer.phone,
-            dateOfBirth: trainer.dateOfBirth,
-            isVerified: trainer.isVerified,
-            isBlocked: trainer.isBlocked
-
-        }));
-        return findedtrainer
-
-
-    }
-    async findUserForChat(): Promise<User[]> {
         try {
-            const user = await userModel.aggregate([
+            const trainers = await trainerModel.aggregate([
                 {
                     $lookup: {
-                        from: "message",
-                        localField: "_id",
-                        foreignField:"senderId",
-                        as: "latestMessage"
+                        from: "conversation",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            { $match: { $expr: { $in: ["$$userId", "$members"] } } },
+                            { $sort: { updationTime: -1 } }
+                        ],
+                        as: "latestConversations"
                     }
                 },
                 {
-                    $unwind: { path: "$latestMessage", preserveNullAndEmptyArrays: true }
+                    $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
                 },
                 {
-                    $sort: { "latestMessage.creationTime": -1 } 
+                    $sort: { "latestConversations.updationTime": -1 }
+                },
+                {
+                    $group: {
+                        _id: "$_id",
+                        name: { $first: "$name" },
+                        email: { $first: "$email" },
+                        phone: { $first: "$phone" },
+                        password: { $first: "$password" },
+                        image: { $first: "$image" },
+                        dateOfBirth: { $first: "$dateOfBirth" },
+                        isVerified: { $first: "$isVerified" },
+                        isBlocked: { $first: "$isBlocked" },
+                    }
+                },
+                {
+                    $sort: { "latestConversation.updationTime": -1 }
+                }
+            ]);
+
+            const findedTrainers = trainers.map((trainer: any) => ({
+                id: trainer._id,
+                name: trainer.name,
+                email: trainer.email,
+                phone: trainer.phone,
+                profileimage: trainer.profileimage,
+                dateOfBirth: trainer.dateOfBirth,
+                isVerified: trainer.isVerified,
+                isBlocked: trainer.isBlocked,
+                latestConversation: trainer.latestConversation,
+                password: trainer.password
+            }));
+
+            return findedTrainers;
+        } catch (error) {
+            console.error(error);
+            throw error;
+        }
+    }
+
+
+    async findUserForChat(): Promise<User[]> {
+        try {
+            const users = await userModel.aggregate([
+                {
+                    $lookup: {
+                        from: "conversation",
+                        let: { userId: "$_id" },
+                        pipeline: [
+                            { $match: { $expr: { $in: ["$$userId", "$members"] } } },
+                            { $sort: { updationTime: -1 } }
+                        ],
+                        as: "latestConversations"
+                    }
+                },
+                {
+                    $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
+                },
+                {
+                    $sort: { "latestConversations.updationTime": -1 }
                 },
                 {
                     $group: {
@@ -157,14 +198,18 @@ class chatRepository implements IchatRepository {
                         phone: { $first: "$phone" },
                         password: { $first: "$password" },
                         profileimage: { $first: "$profileimage" },
-                        latestMessage: { $first: "$latestMessage" } 
+                        otp: { $first: "$otp" },
+                        isVerified: { $first: "$isVerified" },
+                        isBlocked: { $first: "$isBlocked" },
+                        latestConversation: { $first: "$latestConversations" }
                     }
                 },
                 {
-                    $sort: { "latestMessage.creationTime": -1 } 
+                    $sort: { "latestConversation.updationTime": -1 }
                 }
             ]);
-            const findeduser = user.map((user: any) => ({
+
+            const findedUser = users.map((user: any) => ({
                 id: user._id,
                 name: user.name,
                 email: user.email,
@@ -173,18 +218,15 @@ class chatRepository implements IchatRepository {
                 otp: user.otp,
                 isVerified: user.isVerified,
                 isBlocked: user.isBlocked,
-                latestMessage: user.latestMessage ,
+                latestConversation: user.latestConversation,
                 password: user.password
             }));
 
-            return findeduser;
+            return findedUser;
         } catch (error) {
-            console.log(error);
+            console.error(error);
             throw error;
         }
-        
-
-
     }
 
 
@@ -192,8 +234,10 @@ class chatRepository implements IchatRepository {
 
 
 
-    
-    
+
+
+
+
 
 
 

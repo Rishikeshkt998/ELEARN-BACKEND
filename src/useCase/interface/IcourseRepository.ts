@@ -39,6 +39,7 @@ interface IcourseRepository {
     QuestionAdd(question: string, options: string[], correctOption: number, courseId: string): Promise<Question>
     Getquestions(courseId: string): Promise<Question[] | null>;
     QuestionAnswer(questionId: string, answer: number, courseId: string, studentId: string): Promise<boolean>
+    removeQuestion(questionId:string,courseId:string):Promise<any>
     isCourseCompleted(courseId: string,studentId: string): Promise<any>
     
 }
