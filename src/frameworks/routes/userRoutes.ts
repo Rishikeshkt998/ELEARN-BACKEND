@@ -74,6 +74,8 @@ router.post('/editreview', (req, res) => CourseController.EditReviews(req, res))
 router.get('/fetchreviews/:id', (req, res) => CourseController.getReviews(req, res))
 router.post("/answer", (req, res) => CourseController.QuestionAnswer(req, res));
 router.get('/enrolled/:id/:usersId', (req, res) =>CourseController.GetEnrolled(req, res))
+router.get('/downloadcertificate/:courseId/:studentId', (req, res) => CourseController.generateCertificate(req, res))
+
 
 //chat
 
@@ -83,6 +85,7 @@ router.post('/newMessage', (req, res) => { ChatController.addMessage(req, res) }
 router.get('/getConversation/:userId/:tutorid', (req, res) => { ChatController.getConversation(req, res) });
 router.get('/findTutorById/:userId', (req, res) => { ChatController.findTutorById(req, res) });
 router.get('/tutorschat', (req, res) => { ChatController.TrainersForChat(req, res) });
+
 
 
 

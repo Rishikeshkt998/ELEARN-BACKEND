@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import courseUseCase from "../useCase/CourseUseCase";
 import Multer from "multer"
+import { generateCertificate } from "../frameworks/services/pdfKit";
 
 class courseController {
     private courseCase: courseUseCase
@@ -449,6 +450,36 @@ class courseController {
         } catch (error) {
             console.log(error)
             return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
+    async generateCertificate(req: Request, res: Response) {
+        try {
+            
+            const courseId = req.params.courseId;
+            const studentId = req.params.studentId;
+            console.log("courseId,", courseId, studentId)
+            const isCourseCompleted =await this.courseCase.isCourseCompleted(courseId,studentId);
+            console.log("iscourse",isCourseCompleted)
+            if (isCourseCompleted) {
+                await generateCertificate(
+                    res,
+                    isCourseCompleted.response?.studentId.name as string,
+                    isCourseCompleted.response?.courseId.name as string,
+                    isCourseCompleted.response?.completedDate as Date
+                );
+                res.setHeader(
+                    "Content-Disposition",
+                    "attachment; filename=certificate.pdf"
+                );
+                res.setHeader("Content-Type", "application/pdf");
+                
+                
+            } else {
+                res.status(401).json({ message: "course not completed" });
+            }
+        } catch (error) {
+            console.log(error);
+            res.status(500).send("An error occurred");
         }
     }
 

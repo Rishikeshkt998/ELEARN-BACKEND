@@ -53,12 +53,17 @@ function socketServer(server: any) {
         socket.on("markMessageAsRead", async ({ messageId, userId }) => {
             try {
                 await messageModel.findByIdAndUpdate(messageId, { status: 'read' });
+                const updatedMessage = await messageModel.findById(messageId);
                 const user = getUser(userId);
-                if (user) {
-                    io.to(user.socketId).emit("messageRead", {
-                        messageId: messageId,
-                        userId: userId
+                if (updatedMessage && user) {
+                    io.to(user.socketId).emit("getMessage", {
+                        senderId: updatedMessage.senderId,
+                        message: updatedMessage.message,
+                        contentType: updatedMessage.contentType,
+                        status: updatedMessage.status
                     });
+                } else if (!updatedMessage) {
+                    console.error('Message not found:', messageId);
                 }
             } catch (error) {
                 console.error('Error marking message as read:', error);

@@ -27,12 +27,12 @@ exports.enrolledStudentsModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
 const enrolledStudentsSchema = new mongoose_1.Schema({
     courseId: {
-        ref: "course",
         type: String,
+        ref: "course",
     },
     studentId: {
-        ref: "student",
         type: String,
+        ref: "user",
     },
     enrolledTime: {
         type: Date,
@@ -51,6 +51,12 @@ const enrolledStudentsSchema = new mongoose_1.Schema({
         },
     ],
     attendedQuestions: [
+        {
+            type: String,
+            ref: "Chapter"
+        },
+    ],
+    attendedWrongQuestions: [
         {
             type: String,
             ref: "Chapter"

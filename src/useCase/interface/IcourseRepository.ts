@@ -3,6 +3,7 @@ import Category from "../../domain_entities/category"
 import Course from "../../domain_entities/course"
 import Question from "../../domain_entities/question"
 import Trainer from "../../domain_entities/trainer"
+import EnrolledStudents from "../../domain_entities/enrolledStudents"
 
 
 interface IcourseRepository {
@@ -38,6 +39,7 @@ interface IcourseRepository {
     QuestionAdd(question: string, options: string[], correctOption: number, courseId: string): Promise<Question>
     Getquestions(courseId: string): Promise<Question[] | null>;
     QuestionAnswer(questionId: string, answer: number, courseId: string, studentId: string): Promise<boolean>
+    isCourseCompleted(courseId: string,studentId: string): Promise<any>
     
 }
 export default IcourseRepository

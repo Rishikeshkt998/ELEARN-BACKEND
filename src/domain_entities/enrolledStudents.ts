@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+
 interface EnrolledStudents {
     courseId: string;
     studentId: string;
@@ -5,6 +7,7 @@ interface EnrolledStudents {
     completedChapters: []
     completedLessons: [];
     attendedQuestions?:[];
+    attendedWrongQuestions?:[]
     completedDate?:Date;
     courseStatus?:Boolean
 }

@@ -49,12 +49,18 @@ function socketServer(server) {
         socket.on("markMessageAsRead", (_a) => __awaiter(this, [_a], void 0, function* ({ messageId, userId }) {
             try {
                 yield messageModel_1.messageModel.findByIdAndUpdate(messageId, { status: 'read' });
+                const updatedMessage = yield messageModel_1.messageModel.findById(messageId);
                 const user = getUser(userId);
-                if (user) {
-                    io.to(user.socketId).emit("messageRead", {
-                        messageId: messageId,
-                        userId: userId
+                if (updatedMessage && user) {
+                    io.to(user.socketId).emit("getMessage", {
+                        senderId: updatedMessage.senderId,
+                        message: updatedMessage.message,
+                        contentType: updatedMessage.contentType,
+                        status: updatedMessage.status
                     });
+                }
+                else if (!updatedMessage) {
+                    console.error('Message not found:', messageId);
                 }
             }
             catch (error) {

@@ -390,6 +390,7 @@ class courseRepository {
                     return true;
                 }
                 else {
+                    yield enrolledStudentsModel_1.enrolledStudentsModel.findOneAndUpdate({ courseId: courseId, studentId: studentId }, { $push: { attendedWrongQuestions: questionId } }, { upsert: true });
                     return false;
                 }
             }
@@ -675,6 +676,27 @@ class courseRepository {
             }
             catch (error) {
                 console.error('Error searching courses:', error);
+                throw error;
+            }
+        });
+    }
+    isCourseCompleted(courseId, studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("Types:", typeof courseId, typeof studentId);
+                const completed = yield enrolledStudentsModel_1.enrolledStudentsModel.findOne({
+                    courseId,
+                    studentId
+                }).populate("courseId").populate("studentId");
+                console.log('completed', completed);
+                if (completed) {
+                    return completed;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
                 throw error;
             }
         });

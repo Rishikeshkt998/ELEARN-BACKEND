@@ -470,5 +470,21 @@ class courseUseCase {
             }
         });
     }
+    isCourseCompleted(courseId, studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.IcourseRepository.isCourseCompleted(courseId, studentId);
+                if (response) {
+                    return { response };
+                }
+                else {
+                    return { response };
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
 }
 exports.default = courseUseCase;

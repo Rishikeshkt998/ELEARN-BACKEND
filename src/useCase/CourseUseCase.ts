@@ -418,6 +418,21 @@ class courseUseCase {
             console.log(error)
         }
     }
+    async isCourseCompleted(courseId: string, studentId: string) {
+        try {
+            const response = await this.IcourseRepository.isCourseCompleted(
+                courseId,
+                studentId
+            );
+            if (response) {
+                return { response };
+            } else {
+                return { response };
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
 
 
 

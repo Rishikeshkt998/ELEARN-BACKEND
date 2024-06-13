@@ -75,6 +75,7 @@ router.post('/editreview', (req, res) => CourseController.EditReviews(req, res))
 router.get('/fetchreviews/:id', (req, res) => CourseController.getReviews(req, res));
 router.post("/answer", (req, res) => CourseController.QuestionAnswer(req, res));
 router.get('/enrolled/:id/:usersId', (req, res) => CourseController.GetEnrolled(req, res));
+router.get('/downloadcertificate/:courseId/:studentId', (req, res) => CourseController.generateCertificate(req, res));
 //chat
 router.get('/getMessages/:conversationId', (req, res) => { ChatController.getMessages(req, res); });
 router.post('/newConversation', (req, res) => { ChatController.newConversation(req, res); });

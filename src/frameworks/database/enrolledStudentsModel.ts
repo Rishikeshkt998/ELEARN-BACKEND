@@ -4,12 +4,14 @@ import EnrolledCourse from '../../domain_entities/enrolledStudents';
 const enrolledStudentsSchema: Schema<EnrolledCourse> = new Schema({
 
     courseId: {
-        ref: "course",
         type: String,
+        ref: "course",
+        
     },
     studentId: {
-        ref: "student",
-        type: String,
+        type:String,
+        ref: "user",
+        
     },
     enrolledTime:{
         type: Date,
@@ -28,6 +30,12 @@ const enrolledStudentsSchema: Schema<EnrolledCourse> = new Schema({
         },
     ],
     attendedQuestions: [
+        {
+            type: String,
+            ref: "Chapter"
+        },
+    ],
+    attendedWrongQuestions: [
         {
             type: String,
             ref: "Chapter"

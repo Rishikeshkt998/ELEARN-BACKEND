@@ -9,6 +9,7 @@ var __awaiter = (this && this.__awaiter) || function (thisArg, _arguments, P, ge
     });
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+const pdfKit_1 = require("../frameworks/services/pdfKit");
 class courseController {
     constructor(courseCase) {
         this.courseCase = courseCase;
@@ -487,6 +488,30 @@ class courseController {
             catch (error) {
                 console.log(error);
                 return res.status(500).json({ message: 'Internal server error' });
+            }
+        });
+    }
+    generateCertificate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            var _a, _b, _c;
+            try {
+                const courseId = req.params.courseId;
+                const studentId = req.params.studentId;
+                console.log("courseId,", courseId, studentId);
+                const isCourseCompleted = yield this.courseCase.isCourseCompleted(courseId, studentId);
+                console.log("iscourse", isCourseCompleted);
+                if (isCourseCompleted) {
+                    yield (0, pdfKit_1.generateCertificate)(res, (_a = isCourseCompleted.response) === null || _a === void 0 ? void 0 : _a.studentId.name, (_b = isCourseCompleted.response) === null || _b === void 0 ? void 0 : _b.courseId.name, (_c = isCourseCompleted.response) === null || _c === void 0 ? void 0 : _c.completedDate);
+                    res.setHeader("Content-Disposition", "attachment; filename=certificate.pdf");
+                    res.setHeader("Content-Type", "application/pdf");
+                }
+                else {
+                    res.status(401).json({ message: "course not completed" });
+                }
+            }
+            catch (error) {
+                console.log(error);
+                res.status(500).send("An error occurred");
             }
         });
     }

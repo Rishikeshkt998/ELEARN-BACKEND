@@ -15,6 +15,7 @@ import { questionModel } from "../database/questionModel";
 import { enrolledStudentsModel } from "../database/enrolledStudentsModel";
 import { userModel } from "../database/userModel";
 import { orderModel } from "../database/orderModel";
+import EnrolledStudents from "../../domain_entities/enrolledStudents";
 
 
 
@@ -420,6 +421,11 @@ class courseRepository implements IcourseRepository {
 
                 return true;
             } else {
+                await enrolledStudentsModel.findOneAndUpdate(
+                    { courseId: courseId, studentId: studentId },
+                    { $push: { attendedWrongQuestions: questionId } },
+                    { upsert: true }
+                );
                 return false;
             }
         } catch (error) {
@@ -771,10 +777,31 @@ async getTotalCounts() {
             throw error;
         }
     }
+    async isCourseCompleted(courseId: string,studentId: string): Promise<any> {
+        try {
+            console.log("Types:", typeof courseId, typeof studentId);
+            const completed = await enrolledStudentsModel.findOne({
+                courseId,
+                studentId
+            }).populate("courseId").populate("studentId");
+            console.log('completed', completed)
+            if (completed) {
+                
+                return completed;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    
 
    
 
 
 
 }
+
 export default courseRepository
