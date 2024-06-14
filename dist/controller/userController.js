@@ -327,14 +327,6 @@ class userController {
             try {
                 const id = req.params.id;
                 const courseIdCookie = req.cookies.courseId;
-                if (!courseIdCookie) {
-                    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-                    res.cookie('courseId', id, {
-                        maxAge: oneDayInMilliseconds,
-                        sameSite: "none",
-                        secure: true
-                    });
-                }
                 const Response = yield this.userCase.getUserCourseAccess(id);
                 if (Response) {
                     res.status(200).json({ success: true, message: 'get the userdata', Response });
