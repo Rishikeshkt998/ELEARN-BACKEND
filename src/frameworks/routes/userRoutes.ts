@@ -59,6 +59,7 @@ router.get('/completedChapterview/:id/:userId', CourseAccessAuth, (req, res) => 
 router.get('/enrolledview/:id', userAuth, (req, res) => controller.EnrolledCourseForStudent(req, res))
 router.post('/completedlesson', userAuth, (req, res) => controller.LessonCompletion(req, res))
 router.post('/completedchapter', userAuth,(req, res) => controller.ChapterCompletion(req, res))
+router.post('/completiontime', (req, res) => controller.CompletionTimeUpdate(req, res))
 router.get('/userbyid/:id',userAuth, (req, res) => controller.Userview(req, res))
 router.post('/logout',(req, res) => controller.logout(req, res))
 //course

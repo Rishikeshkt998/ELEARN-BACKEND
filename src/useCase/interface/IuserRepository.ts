@@ -23,6 +23,7 @@ interface IuserRepository{
     updateStudentsCourse(id: string, courseId: string): Promise<any>
     addEnrolled(id:string,courseId:string):Promise<any>
     isEnrolled(id:string,courseId:string):Promise<any>
+    CompletedChapterTime(id:string, userId:string):Promise<any>
     CompletedLessonView(id: string,userId:string): Promise<any>
     CompletedChapterView(id: string,userId:string): Promise<any>
     CompletedLesson(id: string,lessonId:string,userId:string): Promise<any>

@@ -697,7 +697,6 @@ class courseRepository {
     isCourseCompleted(courseId, studentId) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                console.log("Types:", typeof courseId, typeof studentId);
                 const completed = yield enrolledStudentsModel_1.enrolledStudentsModel.findOne({
                     courseId,
                     studentId

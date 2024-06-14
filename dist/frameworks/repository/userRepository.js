@@ -359,6 +359,18 @@ class userRepository {
             }
         });
     }
+    CompletedChapterTime(id, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield enrolledStudentsModel_1.enrolledStudentsModel.findOneAndUpdate({ courseId: id, studentId: userId }, { $set: { completedDate: new Date(), courseStatus: true } }, { new: true });
+                return result;
+            }
+            catch (error) {
+                console.error('Error checking enrollment status:', error);
+                return false;
+            }
+        });
+    }
     findEnrolledCourses(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

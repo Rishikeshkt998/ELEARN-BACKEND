@@ -457,6 +457,18 @@ class userController {
             }
         });
     }
+    CompletionTimeUpdate(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const { id, userId } = req.body;
+                const lessencompleted = yield this.userCase.CompletionTime(id, userId);
+                res.json(lessencompleted);
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     EnrolledCourseForStudent(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

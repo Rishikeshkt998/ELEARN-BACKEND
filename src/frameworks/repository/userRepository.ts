@@ -352,6 +352,21 @@ class userRepository implements IuserRepository {
         }
 
     }
+    async CompletedChapterTime(id: string, userId: string): Promise<any> {
+        try {
+            const result = await enrolledStudentsModel.findOneAndUpdate(
+                { courseId: id, studentId: userId },
+                { $set: { completedDate: new Date(), courseStatus: true } },
+                { new: true }
+            );
+            return result;
+
+        } catch (error) {
+            console.error('Error checking enrollment status:', error);
+            return false;
+        }
+        
+    }
     async findEnrolledCourses(id: string): Promise<any> {
         try {
             const enrolledCourses = await enrolledStudentsModel.find({ studentId: id })

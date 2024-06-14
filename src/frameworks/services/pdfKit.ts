@@ -138,9 +138,6 @@ export async function generateCertificate(res: Response, name: string, course: s
     doc.pipe(res);
 
     // Setting response headers
-    res.setHeader("Content-Disposition", `attachment; filename="certificate.pdf"`);
-    res.setHeader("Content-Type", "application/pdf");
-
     // PDF content generation
     const borderWidth = 2;
     const borderPadding = 10;

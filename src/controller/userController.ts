@@ -450,6 +450,16 @@ class userController {
             console.log(error)
         }
     }
+    async CompletionTimeUpdate(req: Request, res: Response) {
+        try {
+            const { id, userId } = req.body
+            const lessencompleted = await this.userCase.CompletionTime(id,  userId)
+            res.json(lessencompleted)
+        }
+        catch (error) {
+            console.log(error)
+        }
+    }
     async EnrolledCourseForStudent(req: Request, res: Response) {
         try {
             const id = req.params.id

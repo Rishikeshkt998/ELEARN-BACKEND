@@ -797,7 +797,6 @@ async getTotalCounts() {
     }
     async isCourseCompleted(courseId: string,studentId: string): Promise<any> {
         try {
-            console.log("Types:", typeof courseId, typeof studentId);
             const completed = await enrolledStudentsModel.findOne({
                 courseId,
                 studentId

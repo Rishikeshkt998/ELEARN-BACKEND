@@ -429,6 +429,18 @@ class UserUseCase {
             }
         });
     }
+    CompletionTime(id, userId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const chaptercompletiontime = yield this.iuserRepository.CompletedChapterTime(id, userId);
+                return { success: true, message: "completiontime updated", chaptercompletiontime };
+            }
+            catch (error) {
+                console.error(error);
+                return { success: false, message: "An error occurred while completeion of lesson" };
+            }
+        });
+    }
     getEnrolledCourseList(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {

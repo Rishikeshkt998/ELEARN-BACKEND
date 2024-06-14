@@ -206,7 +206,7 @@ class trainerRepository implements ItrainerRepository {
                 const course = await courseModel.findById(enrolledStudent.courseId);
                 enrolledStudentsDetails.push({ user, course });
             } 
-            return enrolledStudentsDetails;
+            return {enrolledStudentsDetails,enrolledStudents};
         } catch (error) {
             console.log(error);
             throw error;

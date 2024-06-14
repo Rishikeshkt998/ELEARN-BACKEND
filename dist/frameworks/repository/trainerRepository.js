@@ -228,7 +228,7 @@ class trainerRepository {
                     const course = yield courseModel_1.courseModel.findById(enrolledStudent.courseId);
                     enrolledStudentsDetails.push({ user, course });
                 }
-                return enrolledStudentsDetails;
+                return { enrolledStudentsDetails, enrolledStudents };
             }
             catch (error) {
                 console.log(error);

@@ -423,6 +423,16 @@ class UserUseCase {
             return { success: false, message: "An error occurred while completeion of lesson" };
         }
     }
+    async CompletionTime(id: string,  userId: string) {
+        try {
+            const chaptercompletiontime = await this.iuserRepository.CompletedChapterTime(id, userId);
+
+            return { success: true, message: "completiontime updated", chaptercompletiontime };
+        } catch (error) {
+            console.error(error);
+            return { success: false, message: "An error occurred while completeion of lesson" };
+        }
+    }
     async getEnrolledCourseList(id:string) {
         try {
             const EnrolledCourses= await this.iuserRepository.findEnrolledCourses(id)
