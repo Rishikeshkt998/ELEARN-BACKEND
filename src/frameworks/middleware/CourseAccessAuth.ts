@@ -89,6 +89,7 @@ const CourseAccessAuth = async (req: Request, res: Response, next: NextFunction)
     // }
 
     const token = req.headers.authorization?.split(" ")[1] as string;
+    console.log("token",token)
     const courseId = req.cookies.courseId;
     const RefreshToken = req.cookies.refreshToken as string;
 
@@ -116,7 +117,6 @@ const CourseAccessAuth = async (req: Request, res: Response, next: NextFunction)
         }
 
         const enrollment = await repository.isEnrolled(decoded.id, courseId);
-        console.log(enrollment);
         if (!enrollment) {
             return res.status(401).send({ success: false, message: 'User is not enrolled in this course' });
         }
