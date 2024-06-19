@@ -19,13 +19,13 @@ const enrolledStudentsSchema: Schema<EnrolledCourse> = new Schema({
     },
     completedLessons: [
         {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "Chapter",
         },
     ],
     completedChapters: [
         {
-            type: String,
+            type: mongoose.Schema.Types.ObjectId, 
             ref: "Chapter",
         },
     ],

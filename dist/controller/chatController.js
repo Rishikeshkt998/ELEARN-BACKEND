@@ -154,7 +154,8 @@ class chatController {
     TrainersForChat(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const findedtrainer = yield this.chatCase.getTutorsForChat();
+                const id = req.params.userId;
+                const findedtrainer = yield this.chatCase.getTutorsForChat(id);
                 if (findedtrainer) {
                     return res.status(200).json({ success: true, findedtrainer });
                 }
@@ -171,7 +172,8 @@ class chatController {
     userForChat(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const findeduser = yield this.chatCase.getUsersForChat();
+                const id = req.params.userId;
+                const findeduser = yield this.chatCase.getUsersForChat(id);
                 if (findeduser) {
                     return res.status(200).json({ success: true, findeduser });
                 }

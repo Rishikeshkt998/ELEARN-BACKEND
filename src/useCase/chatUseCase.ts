@@ -107,9 +107,9 @@ class chatUseCase {
             console.log(error)
         }
     }
-    async getTutorsForChat() {
+    async getTutorsForChat(id:any) {
         try {
-            const trainer = await this.iChatRepository.findTutorForchat()
+            const trainer = await this.iChatRepository.findTutorForchat(id)
             if (trainer) {
                 return trainer
             }
@@ -118,9 +118,9 @@ class chatUseCase {
             console.log(error)
         }
     }
-    async getUsersForChat() {
+    async getUsersForChat(id:any) {
         try {
-            const users = await this.iChatRepository.findUserForChat()
+            const users = await this.iChatRepository.findUserForChat(id)
             if (users) {
                 return users
             }

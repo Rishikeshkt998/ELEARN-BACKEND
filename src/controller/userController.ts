@@ -296,18 +296,19 @@ class userController {
         try {
 
             const id = req.params.id
-            const courseIdCookie = req.cookies.courseId;
-            if (!courseIdCookie) {
-                const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-                res.cookie('courseId', id, {
-                    maxAge: oneDayInMilliseconds, 
-                    sameSite: "none",
-                    secure: true
-                });
-            }
+            console.log("id for values",id)
+            // const courseIdCookie = req.cookies.courseId;
+            // if (!courseIdCookie) {
+            //     const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+            //     res.cookie('courseId', id, {
+            //         maxAge: oneMonthInMilliseconds, 
+            //         sameSite: "none",
+            //         secure: true
+            //     });
+            // }
             const Response = await this.userCase.getUserCourse(id)
             if (Response) {
-                res.status(200).json({ success: true, message: 'get the userdata', Response })
+                res.status(200).json({ success: true, message: 'get the userdata', Response,id })
             } else {
 
                 res.status(200).json({ success: true, message: 'error in getting the course data' })
@@ -492,14 +493,20 @@ class userController {
 
     async logout(req: Request, res: Response) {
         try {
-            res.cookie('refreshToken', "", {
+            res.cookie('refreshToken',"", {
                 sameSite: "none",
-                secure: true
-            })
-            res.cookie("courseId", "", {
+                maxAge: 0,
+                secure: true,
                 httpOnly: true,
-                expires: new Date(0)
             });
+
+            res.cookie("courseId","", {
+                sameSite: "none",
+                maxAge:0,
+                secure: true,
+                httpOnly: true,
+            });
+
             res.status(200).json({ success: true, messge: 'successfully logout' })
         } catch (err) {
             console.log(err);

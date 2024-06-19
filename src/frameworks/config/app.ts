@@ -22,7 +22,7 @@ export const createServer=()=>{
             origin: process.env.ORIGIN || "*",
             credentials: true,
             methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
-            allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization",
+            allowedHeaders:"Origin,X-Requested-With,Content-Type,Accept,Authorization,Course-Id",
             optionsSuccessStatus: 200,
         };
 

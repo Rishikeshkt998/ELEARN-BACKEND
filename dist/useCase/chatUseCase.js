@@ -125,10 +125,10 @@ class chatUseCase {
             }
         });
     }
-    getTutorsForChat() {
+    getTutorsForChat(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const trainer = yield this.iChatRepository.findTutorForchat();
+                const trainer = yield this.iChatRepository.findTutorForchat(id);
                 if (trainer) {
                     return trainer;
                 }
@@ -139,10 +139,10 @@ class chatUseCase {
             }
         });
     }
-    getUsersForChat() {
+    getUsersForChat(id) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
-                const users = yield this.iChatRepository.findUserForChat();
+                const users = yield this.iChatRepository.findUserForChat(id);
                 if (users) {
                     return users;
                 }

@@ -85,7 +85,7 @@ router.post('/newConversation', (req, res) => { ChatController.newConversation(r
 router.post('/newMessage', (req, res) => { ChatController.addMessage(req, res) });
 router.get('/getConversation/:userId/:tutorid', (req, res) => { ChatController.getConversation(req, res) });
 router.get('/findTutorById/:userId', (req, res) => { ChatController.findTutorById(req, res) });
-router.get('/tutorschat', (req, res) => { ChatController.TrainersForChat(req, res) });
+router.get('/tutorschat/:userId', (req, res) => { ChatController.TrainersForChat(req, res) });
 
 
 

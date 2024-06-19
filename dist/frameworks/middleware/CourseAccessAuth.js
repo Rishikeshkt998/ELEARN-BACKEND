@@ -23,7 +23,9 @@ const CourseAccessAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, f
     var _a;
     const token = (_a = req.headers.authorization) === null || _a === void 0 ? void 0 : _a.split(" ")[1];
     console.log("token", token);
-    const courseId = req.cookies.courseId;
+    // const courseId = req.cookies.courseId;
+    const courseId = req.headers['course-id'];
+    console.log("courseId", courseId);
     const RefreshToken = req.cookies.refreshToken;
     if (!token) {
         console.log("unauthorized-1");
@@ -45,6 +47,7 @@ const CourseAccessAuth = (req, res, next) => __awaiter(void 0, void 0, void 0, f
             return res.status(401).send({ success: false, message: 'User is blocked !!' });
         }
         const enrollment = yield repository.isEnrolled(decoded.id, courseId);
+        console.log("courseId,useerId", decoded.id, courseId);
         if (!enrollment) {
             return res.status(401).send({ success: false, message: 'User is not enrolled in this course' });
         }

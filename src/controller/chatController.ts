@@ -130,7 +130,8 @@ class chatController {
     }
     async TrainersForChat(req: Request, res: Response) {
         try {
-            const findedtrainer = await this.chatCase.getTutorsForChat()
+            const id=req.params.userId
+            const findedtrainer = await this.chatCase.getTutorsForChat(id)
             if (findedtrainer) {
                 return res.status(200).json({ success: true, findedtrainer })
             } else {
@@ -143,7 +144,8 @@ class chatController {
     }
     async userForChat(req: Request, res: Response) {
         try {
-            const findeduser = await this.chatCase.getUsersForChat()
+            const id=req.params.userId
+            const findeduser = await this.chatCase.getUsersForChat(id)
             if (findeduser) {
                 return res.status(200).json({ success: true, findeduser })
             } else {

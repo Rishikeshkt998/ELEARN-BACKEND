@@ -84,7 +84,7 @@ router.post('/newMessage', (req, res) => { ChatController.addMessage(req, res) }
 router.put('/readMessage/:id',(req,res)=>{ChatController.MakeasRead(req,res)})
 router.get('/getConversation/:userId/:tutorid', (req, res) => { ChatController.getConversation(req, res) });
 router.get('/findUserById/:userId', (req, res) => { ChatController.findUserById(req, res) });
-router.get('/usersforchat', (req, res) => { ChatController.userForChat(req, res) });
+router.get('/usersforchat/:userId', (req, res) => { ChatController.userForChat(req, res) });
 
 
 

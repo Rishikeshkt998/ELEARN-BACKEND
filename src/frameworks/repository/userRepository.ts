@@ -1,11 +1,12 @@
 import Course from "../../domain_entities/course";
 import User from "../../domain_entities/user";
 import IuserRepository from "../../useCase/interface/IuserRepository";
+import { conversationModel } from "../database/conversationModel";
 import { courseModel } from "../database/courseModel";
 import { enrolledStudentsModel } from "../database/enrolledStudentsModel";
 import { orderModel } from "../database/orderModel";
 import { userModel } from "../database/userModel";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { ObjectId, Types } from "mongoose";
 
 
 
@@ -259,6 +260,28 @@ class userRepository implements IuserRepository {
         }
         
     }
+    async updateChats(userId: string, courseId: string): Promise<any> {
+        try {
+            const course = await courseModel.findById(courseId);
+            if (!course) {
+                throw new Error('Course not found');
+            }
+            const instructorId = course.instructorId;
+            console.log("instructor",instructorId)
+            const conversationExist = await conversationModel.findOne({
+                members: { $all: [userId, instructorId] }
+            });
+
+            if (conversationExist) {
+                return conversationExist;
+            }
+            const newConversation = new conversationModel({ members: [userId, instructorId] });
+            return await newConversation.save();
+        } catch (error) {
+            console.error(error);
+            throw error; 
+        }
+    }
     async addEnrolled(id: string, courseId: string): Promise<any> {
         try {
             const newenrolled = new enrolledStudentsModel({
@@ -324,9 +347,10 @@ class userRepository implements IuserRepository {
     }
     async CompletedLesson(id: string, lessonId: any,userId:string): Promise<any> {
         try {
+            const lessonObjectId = new Types.ObjectId(lessonId);
             const result = await enrolledStudentsModel.findOneAndUpdate(
                 { courseId: id, studentId: userId },
-                { $addToSet: { completedLessons: lessonId } },
+                { $addToSet: { completedLessons: lessonObjectId } },
                 { new: true }
             );
             return result;
@@ -339,9 +363,10 @@ class userRepository implements IuserRepository {
     }
     async CompletedChapter(id: string, chapterId: any,userId:string): Promise<any> {
         try {
+            const chapterObjectId = new Types.ObjectId(chapterId);
             const result = await enrolledStudentsModel.findOneAndUpdate(
                 { courseId: id, studentId: userId },
-                { $addToSet: { completedChapters: chapterId } },
+                { $addToSet: { completedChapters: chapterObjectId } },
                 { new: true }
             );
             return result;

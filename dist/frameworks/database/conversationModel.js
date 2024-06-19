@@ -28,7 +28,7 @@ const mongoose_1 = __importStar(require("mongoose"));
 const conversationSchema = new mongoose_1.Schema({
     members: [
         {
-            type: String,
+            type: mongoose_1.Types.ObjectId,
             required: true
         }
     ],

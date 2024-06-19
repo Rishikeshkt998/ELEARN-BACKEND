@@ -374,8 +374,10 @@ class UserUseCase {
 
             const updatedOrder = await this.iuserRepository.updateOrder(id,courseId, payment_Info);
             const updateUser = await this.iuserRepository.updateStudentsCourse(id,courseId)
+            const updateChat = await this.iuserRepository.updateChats(id, courseId)
 
-            return { success: true, message: "Order updated successfully", updatedOrder ,updateEnrolledStudents,updateUser};
+
+            return { success: true, message: "Order updated successfully", updatedOrder ,updateEnrolledStudents,updateUser,updateChat};
         } catch (error) {
             console.error(error);
             return { success: false, message: "An error occurred while processing the order" };

@@ -1,10 +1,10 @@
-import mongoose, { Schema } from 'mongoose';
+import mongoose, { Schema, Types } from 'mongoose';
 import Conversation from '../../domain_entities/conversations';
 
 const conversationSchema: Schema<Conversation> = new Schema({
     members: [
         {
-            type: String,
+            type: Types.ObjectId,
             required: true
         }
     ],

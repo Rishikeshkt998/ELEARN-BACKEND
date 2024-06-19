@@ -31,7 +31,7 @@ class JwtToken {
             const jwtToken = process.env.JWT_SECRET_KEY;
             if (jwtToken) {
                 const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken, {
-                    expiresIn: "10d",
+                    expiresIn: "30d",
                 });
                 return token;
             }
@@ -50,7 +50,7 @@ class JwtToken {
             const jwtToken = process.env.JWT_REFRESH_SECRET_KEY;
             if (jwtToken) {
                 const token = jsonwebtoken_1.default.sign({ id: userId, role: role }, jwtToken, {
-                    expiresIn: "10d",
+                    expiresIn: "30d",
                 });
                 return token;
             }

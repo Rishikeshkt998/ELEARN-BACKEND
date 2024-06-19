@@ -812,13 +812,6 @@ async getTotalCounts() {
             throw error;
         }
     }
-
-    
-
-   
-
-
-
 }
 
 export default courseRepository

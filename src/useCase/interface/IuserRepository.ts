@@ -21,6 +21,7 @@ interface IuserRepository{
     findCourseForAccess(id: string): Promise<any>
     updateOrder(id:string,courseId:string,payment_Info:any):Promise<any>
     updateStudentsCourse(id: string, courseId: string): Promise<any>
+    updateChats(id: string, courseId: string): Promise<any>  
     addEnrolled(id:string,courseId:string):Promise<any>
     isEnrolled(id:string,courseId:string):Promise<any>
     CompletedChapterTime(id:string, userId:string):Promise<any>

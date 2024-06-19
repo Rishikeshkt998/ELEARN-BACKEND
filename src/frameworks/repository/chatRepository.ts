@@ -5,7 +5,7 @@ import { messageModel } from "../database/messageModel";
 import { userModel } from "../database/userModel";
 import { trainerModel } from "../database/trainerModel";
 import Trainer from "../../domain_entities/trainer";
-import mongoose, { ObjectId } from "mongoose";
+import mongoose, { ObjectId, Types } from "mongoose";
 import User from "../../domain_entities/user";
 import chatModel from "../database/chatModel";
 
@@ -83,7 +83,10 @@ class chatRepository implements IchatRepository {
 
     async getConversations(userId: string, tutorId: string): Promise<any> {
         try {
-            const conversations = await conversationModel.find({ members: { $all: [userId, tutorId] } })
+            const usersId = new Types.ObjectId(userId);
+            const tutorsId = new Types.ObjectId(tutorId);
+            const conversations = await conversationModel.find({ members: { $all: [usersId, tutorsId] } })
+            console.log("conversation",conversations)
             if (conversations) {
                 return conversations
             } else {
@@ -110,124 +113,186 @@ class chatRepository implements IchatRepository {
             console.log(error)
         }
     }
-
-    async findTutorForchat(): Promise<Trainer[]> {
-        try {
-            const trainers = await trainerModel.aggregate([
-                {
-                    $lookup: {
-                        from: "conversation",
-                        let: { userId: "$_id" },
-                        pipeline: [
-                            { $match: { $expr: { $in: ["$$userId", "$members"] } } },
-                            { $sort: { updationTime: -1 } }
-                        ],
-                        as: "latestConversations"
-                    }
+    
+    async findTutorForchat(id: string): Promise<any> {
+        console.log("userId",id)
+        const studentId = new Types.ObjectId(id);
+        const findedTrainers = await conversationModel.aggregate([
+            {
+                $match: {
+                    "members.0": studentId,
                 },
-                {
-                    $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
+            },
+            {
+                $lookup: {
+                    from: "trainers",
+                    localField: "members.1",
+                    foreignField: "_id",
+                    as: "instructorDetails",
+                    
+                    
                 },
-                {
-                    $sort: { "latestConversations.updationTime": -1 }
+            },
+            {
+                $unwind: "$instructorDetails",
+            },
+            {
+                $sort: {
+                    updationTime: -1,
                 },
-                {
-                    $group: {
-                        _id: "$_id",
-                        name: { $first: "$name" },
-                        email: { $first: "$email" },
-                        phone: { $first: "$phone" },
-                        password: { $first: "$password" },
-                        image: { $first: "$image" },
-                        dateOfBirth: { $first: "$dateOfBirth" },
-                        isVerified: { $first: "$isVerified" },
-                        isBlocked: { $first: "$isBlocked" },
-                    }
-                },
-                {
-                    $sort: { "latestConversation.updationTime": -1 }
-                }
-            ]);
-
-            const findedTrainers = trainers.map((trainer: any) => ({
-                id: trainer._id,
-                name: trainer.name,
-                email: trainer.email,
-                phone: trainer.phone,
-                profileimage: trainer.profileimage,
-                dateOfBirth: trainer.dateOfBirth,
-                isVerified: trainer.isVerified,
-                isBlocked: trainer.isBlocked,
-                latestConversation: trainer.latestConversation,
-                password: trainer.password
-            }));
-
-            return findedTrainers;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
+            },
+        ]);
+        console.log("trainers",findedTrainers)
+        return findedTrainers;
     }
+    async findUserForChat(id: string): Promise<any> {
+        console.log("userId", id)
+        const tutorId = new Types.ObjectId(id);
+        const findedTrainers = await conversationModel.aggregate([
+            {
+                $match: {
+                    "members.1": tutorId,
+                },
+            },
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "members.0",
+                    foreignField: "_id",
+                    as: "userDetails",
 
 
-    async findUserForChat(): Promise<User[]> {
-        try {
-            const users = await userModel.aggregate([
-                {
-                    $lookup: {
-                        from: "conversation",
-                        let: { userId: "$_id" },
-                        pipeline: [
-                            { $match: { $expr: { $in: ["$$userId", "$members"] } } },
-                            { $sort: { updationTime: -1 } }
-                        ],
-                        as: "latestConversations"
-                    }
                 },
-                {
-                    $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
+            },
+            {
+                $unwind: "$userDetails",
+            },
+            {
+                $sort: {
+                    updationTime: -1,
                 },
-                {
-                    $sort: { "latestConversations.updationTime": -1 }
-                },
-                {
-                    $group: {
-                        _id: "$_id",
-                        name: { $first: "$name" },
-                        email: { $first: "$email" },
-                        phone: { $first: "$phone" },
-                        password: { $first: "$password" },
-                        profileimage: { $first: "$profileimage" },
-                        otp: { $first: "$otp" },
-                        isVerified: { $first: "$isVerified" },
-                        isBlocked: { $first: "$isBlocked" },
-                        latestConversation: { $first: "$latestConversations" }
-                    }
-                },
-                {
-                    $sort: { "latestConversation.updationTime": -1 }
-                }
-            ]);
-
-            const findedUser = users.map((user: any) => ({
-                id: user._id,
-                name: user.name,
-                email: user.email,
-                phone: user.phone,
-                profileimage: user.profileimage,
-                otp: user.otp,
-                isVerified: user.isVerified,
-                isBlocked: user.isBlocked,
-                latestConversation: user.latestConversation,
-                password: user.password
-            }));
-
-            return findedUser;
-        } catch (error) {
-            console.error(error);
-            throw error;
-        }
+            },
+        ]);
+        console.log("trainers", findedTrainers)
+        return findedTrainers;
     }
+    // async findTutorForchat(): Promise<Trainer[]> {
+    //     try {
+    //         const trainers = await trainerModel.aggregate([
+    //             {
+    //                 $lookup: {
+    //                     from: "conversation",
+    //                     let: { userId: "$_id" },
+    //                     pipeline: [
+    //                         { $match: { $expr: { $in: ["$$userId", "$members"] } } },
+    //                         { $sort: { updationTime: -1 } }
+    //                     ],
+    //                     as: "latestConversations"
+    //                 }
+    //             },
+    //             {
+    //                 $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
+    //             },
+    //             {
+    //                 $sort: { "latestConversations.updationTime": -1 }
+    //             },
+    //             {
+    //                 $group: {
+    //                     _id: "$_id",
+    //                     name: { $first: "$name" },
+    //                     email: { $first: "$email" },
+    //                     phone: { $first: "$phone" },
+    //                     password: { $first: "$password" },
+    //                     image: { $first: "$image" },
+    //                     dateOfBirth: { $first: "$dateOfBirth" },
+    //                     isVerified: { $first: "$isVerified" },
+    //                     isBlocked: { $first: "$isBlocked" },
+    //                 }
+    //             },
+    //             {
+    //                 $sort: { "latestConversation.updationTime": -1 }
+    //             }
+    //         ]);
+
+    //         const findedTrainers = trainers.map((trainer: any) => ({
+    //             id: trainer._id,
+    //             name: trainer.name,
+    //             email: trainer.email,
+    //             phone: trainer.phone,
+    //             profileimage: trainer.profileimage,
+    //             dateOfBirth: trainer.dateOfBirth,
+    //             isVerified: trainer.isVerified,
+    //             isBlocked: trainer.isBlocked,
+    //             latestConversation: trainer.latestConversation,
+    //             password: trainer.password
+    //         }));
+
+    //         return findedTrainers;
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
+
+
+    // async findUserForChat(): Promise<User[]> {
+    //     try {
+    //         const users = await userModel.aggregate([
+    //             {
+    //                 $lookup: {
+    //                     from: "conversation",
+    //                     let: { userId: "$_id" },
+    //                     pipeline: [
+    //                         { $match: { $expr: { $in: ["$$userId", "$members"] } } },
+    //                         { $sort: { updationTime: -1 } }
+    //                     ],
+    //                     as: "latestConversations"
+    //                 }
+    //             },
+    //             {
+    //                 $unwind: { path: "$latestConversations", preserveNullAndEmptyArrays: true }
+    //             },
+    //             {
+    //                 $sort: { "latestConversations.updationTime": -1 }
+    //             },
+    //             {
+    //                 $group: {
+    //                     _id: "$_id",
+    //                     name: { $first: "$name" },
+    //                     email: { $first: "$email" },
+    //                     phone: { $first: "$phone" },
+    //                     password: { $first: "$password" },
+    //                     profileimage: { $first: "$profileimage" },
+    //                     otp: { $first: "$otp" },
+    //                     isVerified: { $first: "$isVerified" },
+    //                     isBlocked: { $first: "$isBlocked" },
+    //                     latestConversation: { $first: "$latestConversations" }
+    //                 }
+    //             },
+    //             {
+    //                 $sort: { "latestConversation.updationTime": -1 }
+    //             }
+    //         ]);
+
+    //         const findedUser = users.map((user: any) => ({
+    //             id: user._id,
+    //             name: user.name,
+    //             email: user.email,
+    //             phone: user.phone,
+    //             profileimage: user.profileimage,
+    //             otp: user.otp,
+    //             isVerified: user.isVerified,
+    //             isBlocked: user.isBlocked,
+    //             latestConversation: user.latestConversation,
+    //             password: user.password
+    //         }));
+
+    //         return findedUser;
+    //     } catch (error) {
+    //         console.error(error);
+    //         throw error;
+    //     }
+    // }
 
 
 

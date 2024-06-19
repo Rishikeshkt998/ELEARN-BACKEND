@@ -299,18 +299,19 @@ class userController {
         return __awaiter(this, void 0, void 0, function* () {
             try {
                 const id = req.params.id;
-                const courseIdCookie = req.cookies.courseId;
-                if (!courseIdCookie) {
-                    const oneDayInMilliseconds = 24 * 60 * 60 * 1000;
-                    res.cookie('courseId', id, {
-                        maxAge: oneDayInMilliseconds,
-                        sameSite: "none",
-                        secure: true
-                    });
-                }
+                console.log("id for values", id);
+                // const courseIdCookie = req.cookies.courseId;
+                // if (!courseIdCookie) {
+                //     const oneMonthInMilliseconds = 30 * 24 * 60 * 60 * 1000;
+                //     res.cookie('courseId', id, {
+                //         maxAge: oneMonthInMilliseconds, 
+                //         sameSite: "none",
+                //         secure: true
+                //     });
+                // }
                 const Response = yield this.userCase.getUserCourse(id);
                 if (Response) {
-                    res.status(200).json({ success: true, message: 'get the userdata', Response });
+                    res.status(200).json({ success: true, message: 'get the userdata', Response, id });
                 }
                 else {
                     res.status(200).json({ success: true, message: 'error in getting the course data' });
@@ -510,11 +511,15 @@ class userController {
             try {
                 res.cookie('refreshToken', "", {
                     sameSite: "none",
-                    secure: true
+                    maxAge: 0,
+                    secure: true,
+                    httpOnly: true,
                 });
                 res.cookie("courseId", "", {
+                    sameSite: "none",
+                    maxAge: 0,
+                    secure: true,
                     httpOnly: true,
-                    expires: new Date(0)
                 });
                 res.status(200).json({ success: true, messge: 'successfully logout' });
             }
