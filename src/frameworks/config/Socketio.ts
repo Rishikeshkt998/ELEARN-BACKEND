@@ -40,7 +40,7 @@ function socketServer(server: any) {
         socket.on("sendMessage", async({senderId,recieverId,message,contentType,status})=>{
             const conversation = await conversationModel.findOneAndUpdate(
                 { members: { $all: [senderId, recieverId] } },
-                { updationTime: new Date() },
+                { $set: { updatedAt: new Date(), latestMessage: message }},
                 { new: true } 
             );
             console.log(conversation)

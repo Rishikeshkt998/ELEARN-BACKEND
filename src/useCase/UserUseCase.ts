@@ -375,6 +375,8 @@ class UserUseCase {
             const updatedOrder = await this.iuserRepository.updateOrder(id,courseId, payment_Info);
             const updateUser = await this.iuserRepository.updateStudentsCourse(id,courseId)
             const updateChat = await this.iuserRepository.updateChats(id, courseId)
+            const updatewhishlist = await this.iuserRepository.updateWhishlist(id, courseId)
+
 
 
             return { success: true, message: "Order updated successfully", updatedOrder ,updateEnrolledStudents,updateUser,updateChat};

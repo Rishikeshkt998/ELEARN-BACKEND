@@ -416,6 +416,18 @@ class courseUseCase {
         }
 
     }
+    async getEnrolledCourseForPurchase(usersId: string) {
+        try {
+            const EnrolledCourses = await this.IcourseRepository.findEnrolledCoursesForPurchase(usersId)
+            if (EnrolledCourses) {
+                return EnrolledCourses
+            }
+            return null
+        } catch (error) {
+            console.log(error)
+        }
+
+    }
     
     async SearchCourses(search: string,category:string,price:string) {
         try {
@@ -439,6 +451,30 @@ class courseUseCase {
                 return { response };
             } else {
                 return { response };
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async addToFavourite(studentId: string, courseId: string) {
+        try {
+            const added = await this.IcourseRepository.addToFavourite(studentId, courseId);
+            if (added) {
+                return { status: true, message: "added to favourites" ,added,courseId};
+            } else {
+                return { status: false, message: "removed from favourites" }
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async fetchFavourites(studentId: string) {
+        try {
+            const response = await this.IcourseRepository.fetchFavourites(studentId);
+            if (response) {
+                return { status: true, favourites: response };
+            } else {
+                return { status: false, favourites: null };
             }
         } catch (error) {
             console.log(error);

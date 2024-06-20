@@ -505,6 +505,24 @@ class courseController {
             }
         });
     }
+    GetEnrolledForPurchase(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const usersId = req.params.usersId;
+                const EnrolledCourses = yield this.courseCase.getEnrolledCourseForPurchase(usersId);
+                if (EnrolledCourses) {
+                    return res.status(200).json({ success: true, EnrolledCourses });
+                }
+                else {
+                    return res.status(401).json({ success: false, message: 'enrolled students  not found' });
+                }
+            }
+            catch (error) {
+                console.log(error);
+                return res.status(500).json({ message: 'Internal server error' });
+            }
+        });
+    }
     generateCertificate(req, res) {
         return __awaiter(this, void 0, void 0, function* () {
             var _a, _b, _c;
@@ -544,6 +562,43 @@ class courseController {
             catch (error) {
                 console.log(error);
                 res.json({ success: false, message: 'Internal server error occured!' });
+            }
+        });
+    }
+    addToFavourite(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const studentId = req.body.userId;
+                const courseId = req.body.courseId;
+                console.log(studentId, courseId);
+                const response = yield this.courseCase.addToFavourite(studentId, courseId);
+                if (response === null || response === void 0 ? void 0 : response.status) {
+                    res.status(200).json(response);
+                }
+                else {
+                    res.status(200).json(response);
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    fetchFavourites(req, res) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const studentId = req.query.userId;
+                console.log(studentId, "sssss");
+                const response = yield this.courseCase.fetchFavourites(studentId);
+                if (response === null || response === void 0 ? void 0 : response.status) {
+                    res.status(200).json(response);
+                }
+                else {
+                    res.status(200).json(response);
+                }
+            }
+            catch (error) {
+                console.log(error);
             }
         });
     }

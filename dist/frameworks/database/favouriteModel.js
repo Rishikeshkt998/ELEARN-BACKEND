@@ -23,19 +23,19 @@ var __importStar = (this && this.__importStar) || function (mod) {
     return result;
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.conversationModel = void 0;
+exports.favouriteModel = void 0;
 const mongoose_1 = __importStar(require("mongoose"));
-const conversationSchema = new mongoose_1.Schema({
-    members: [
-        {
-            type: mongoose_1.Types.ObjectId,
-            required: true
-        }
-    ],
-    latestMessage: {
+const favouriteSchema = new mongoose_1.Schema({
+    studentId: {
         type: String,
-        default: ""
-    }
-}, { timestamps: true });
-const conversationModel = mongoose_1.default.model('conversation', conversationSchema);
-exports.conversationModel = conversationModel;
+        required: true
+    },
+    favourites: [
+        {
+            type: String,
+            ref: "course",
+        },
+    ],
+});
+const favouriteModel = mongoose_1.default.model('favourite', favouriteSchema);
+exports.favouriteModel = favouriteModel;

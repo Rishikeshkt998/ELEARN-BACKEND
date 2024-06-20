@@ -8,14 +8,13 @@ const conversationSchema: Schema<Conversation> = new Schema({
             required: true
         }
     ],
-    creationTime: {
-        type: Date,
-        default: Date.now,
-    },
-    updationTime: {
-        type: Date
+    latestMessage: {
+        type: String,
+        default: ""
     }
-});
+
+    
+}, { timestamps: true });
 
 const conversationModel = mongoose.model<Conversation>('conversation', conversationSchema);
 export { conversationModel }

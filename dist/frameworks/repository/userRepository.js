@@ -35,6 +35,7 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const conversationModel_1 = require("../database/conversationModel");
 const courseModel_1 = require("../database/courseModel");
 const enrolledStudentsModel_1 = require("../database/enrolledStudentsModel");
+const favouriteModel_1 = require("../database/favouriteModel");
 const orderModel_1 = require("../database/orderModel");
 const userModel_1 = require("../database/userModel");
 const mongoose_1 = __importStar(require("mongoose"));
@@ -301,7 +302,7 @@ class userRepository {
             try {
                 const course = yield courseModel_1.courseModel.findById(courseId);
                 if (!course) {
-                    throw new Error('Course not found');
+                    return { success: false, message: "course not found" };
                 }
                 const instructorId = course.instructorId;
                 console.log("instructor", instructorId);
@@ -309,10 +310,26 @@ class userRepository {
                     members: { $all: [userId, instructorId] }
                 });
                 if (conversationExist) {
-                    return conversationExist;
+                    return { success: true, conversationExist };
                 }
                 const newConversation = new conversationModel_1.conversationModel({ members: [userId, instructorId] });
                 return yield newConversation.save();
+            }
+            catch (error) {
+                console.error(error);
+                throw error;
+            }
+        });
+    }
+    updateWhishlist(userId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const result = yield favouriteModel_1.favouriteModel.findOneAndUpdate({ studentId: userId }, { $pull: { favourites: courseId } });
+                if (!result) {
+                    return { success: false, message: "course not found" };
+                }
+                return { success: true, result };
+                ;
             }
             catch (error) {
                 console.error(error);

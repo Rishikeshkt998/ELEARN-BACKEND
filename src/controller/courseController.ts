@@ -467,6 +467,20 @@ class courseController {
             return res.status(500).json({ message: 'Internal server error' });
         }
     }
+    async GetEnrolledForPurchase(req: Request, res: Response) {
+        try {
+            const usersId = req.params.usersId
+            const EnrolledCourses = await this.courseCase.getEnrolledCourseForPurchase(usersId)
+            if (EnrolledCourses) {
+                return res.status(200).json({ success: true, EnrolledCourses })
+            } else {
+                return res.status(401).json({ success: false, message: 'enrolled students  not found' })
+            }
+        } catch (error) {
+            console.log(error)
+            return res.status(500).json({ message: 'Internal server error' });
+        }
+    }
     async generateCertificate(req: Request, res: Response) {
         try {
             
@@ -517,6 +531,37 @@ class courseController {
             res.json({ success: false, message: 'Internal server error occured!' });
         }
 
+    }
+    async addToFavourite(req: Request, res: Response) {
+        try {
+            const studentId = req.body.userId;
+            const courseId = req.body.courseId;
+            console.log(studentId,courseId)
+            const response = await this.courseCase.addToFavourite(studentId, courseId);
+            if (response?.status) {
+                res.status(200).json(response);
+            } else {
+                res.status(200).json(response)
+            }
+        } catch (error) {
+            console.log(error);
+        }
+    }
+    async fetchFavourites(req: Request, res: Response) {
+        try {
+            const studentId = req.query.userId as string;
+            console.log(studentId, "sssss");
+
+            const response = await this.courseCase.fetchFavourites(studentId);
+            if (response?.status) {
+                res.status(200).json(response)
+            } else {
+                res.status(200).json(response)
+            }
+        } catch (error) {
+            console.log(error);
+
+        }
     }
 
 

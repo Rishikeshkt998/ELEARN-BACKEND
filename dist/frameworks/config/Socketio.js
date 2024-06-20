@@ -37,7 +37,7 @@ function socketServer(server) {
             io.emit("getUsers", users);
         });
         socket.on("sendMessage", (_a) => __awaiter(this, [_a], void 0, function* ({ senderId, recieverId, message, contentType, status }) {
-            const conversation = yield conversationModel_1.conversationModel.findOneAndUpdate({ members: { $all: [senderId, recieverId] } }, { updationTime: new Date() }, { new: true });
+            const conversation = yield conversationModel_1.conversationModel.findOneAndUpdate({ members: { $all: [senderId, recieverId] } }, { $set: { updatedAt: new Date(), latestMessage: message } }, { new: true });
             console.log(conversation);
             const user = getUser(recieverId);
             if (user) {

@@ -374,6 +374,7 @@ class UserUseCase {
                 const updatedOrder = yield this.iuserRepository.updateOrder(id, courseId, payment_Info);
                 const updateUser = yield this.iuserRepository.updateStudentsCourse(id, courseId);
                 const updateChat = yield this.iuserRepository.updateChats(id, courseId);
+                const updatewhishlist = yield this.iuserRepository.updateWhishlist(id, courseId);
                 return { success: true, message: "Order updated successfully", updatedOrder, updateEnrolledStudents, updateUser, updateChat };
             }
             catch (error) {

@@ -4,6 +4,7 @@ import IuserRepository from "../../useCase/interface/IuserRepository";
 import { conversationModel } from "../database/conversationModel";
 import { courseModel } from "../database/courseModel";
 import { enrolledStudentsModel } from "../database/enrolledStudentsModel";
+import { favouriteModel } from "../database/favouriteModel";
 import { orderModel } from "../database/orderModel";
 import { userModel } from "../database/userModel";
 import mongoose, { ObjectId, Types } from "mongoose";
@@ -264,7 +265,7 @@ class userRepository implements IuserRepository {
         try {
             const course = await courseModel.findById(courseId);
             if (!course) {
-                throw new Error('Course not found');
+                return { success: false, message: "course not found" };
             }
             const instructorId = course.instructorId;
             console.log("instructor",instructorId)
@@ -273,13 +274,31 @@ class userRepository implements IuserRepository {
             });
 
             if (conversationExist) {
-                return conversationExist;
+                return { success: true, conversationExist };
             }
             const newConversation = new conversationModel({ members: [userId, instructorId] });
             return await newConversation.save();
         } catch (error) {
             console.error(error);
             throw error; 
+        }
+    }
+    async updateWhishlist(userId: string, courseId: string): Promise<any> {
+        try {
+            const result = await favouriteModel.findOneAndUpdate(
+                { studentId: userId },
+                { $pull: { favourites: courseId } }
+            );
+
+            if (!result) {
+                return { success: false, message: "course not found" };
+            }
+
+            return { success: true ,result};;
+            
+        } catch (error) {
+            console.error(error);
+            throw error;
         }
     }
     async addEnrolled(id: string, courseId: string): Promise<any> {

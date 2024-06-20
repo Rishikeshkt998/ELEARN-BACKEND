@@ -21,6 +21,7 @@ const questionModel_1 = require("../database/questionModel");
 const enrolledStudentsModel_1 = require("../database/enrolledStudentsModel");
 const userModel_1 = require("../database/userModel");
 const orderModel_1 = require("../database/orderModel");
+const favouriteModel_1 = require("../database/favouriteModel");
 class courseRepository {
     findCategories() {
         return __awaiter(this, void 0, void 0, function* () {
@@ -521,6 +522,26 @@ class courseRepository {
             }
         });
     }
+    findEnrolledCoursesForPurchase(usersId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const enrolledCourses = yield enrolledStudentsModel_1.enrolledStudentsModel.find({ studentId: usersId })
+                    .populate({
+                    path: 'studentId',
+                    model: userModel_1.userModel
+                })
+                    .populate({
+                    path: 'courseId',
+                    model: courseModel_1.courseModel
+                });
+                return enrolledCourses;
+            }
+            catch (error) {
+                console.error('Error finding enrolled courses:', error);
+                throw error;
+            }
+        });
+    }
     UserDataforAnalysis() {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -704,6 +725,53 @@ class courseRepository {
                 console.log('completed', completed);
                 if (completed) {
                     return completed;
+                }
+                else {
+                    return null;
+                }
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    addToFavourite(studentId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const favouriteFound = yield favouriteModel_1.favouriteModel.findOne({
+                    studentId: studentId,
+                });
+                if (favouriteFound) {
+                    if (favouriteFound.favourites.includes(courseId)) {
+                        yield favouriteModel_1.favouriteModel.updateOne({ studentId }, { $pull: { favourites: courseId } });
+                        return false;
+                    }
+                    else {
+                        yield favouriteModel_1.favouriteModel.updateOne({ studentId }, { $push: { favourites: courseId } });
+                    }
+                    return true;
+                }
+                else {
+                    yield favouriteModel_1.favouriteModel.create({
+                        studentId,
+                        favourites: [courseId],
+                    });
+                    return true;
+                }
+            }
+            catch (error) {
+                throw error;
+            }
+        });
+    }
+    fetchFavourites(studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                console.log("whi studentid", studentId);
+                const favourites = yield favouriteModel_1.favouriteModel.findOne({ studentId: studentId }).populate('favourites').exec();
+                console.log("favourite", favourites);
+                if (favourites) {
+                    return favourites;
                 }
                 else {
                     return null;

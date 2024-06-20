@@ -27,6 +27,7 @@ interface IcourseRepository {
     reviewFetch(id: string): Promise<any>,
     AddReply(reviewId:string, replyText:string): Promise<any>,
     findEnrolledCourses(id: string,usersId:string): Promise<any>
+    findEnrolledCoursesForPurchase(usersId: string):Promise<any>
     SearchCourses(search: string,category:string,price:string): Promise<any>
     getTotalCounts():Promise<any>,
     getTotalCountsTutor(id: string): Promise<any>,
@@ -41,6 +42,8 @@ interface IcourseRepository {
     QuestionAnswer(questionId: string, answer: number, courseId: string, studentId: string): Promise<boolean>
     removeQuestion(questionId:string,courseId:string):Promise<any>
     isCourseCompleted(courseId: string,studentId: string): Promise<any>
+    addToFavourite(studentId:string, courseId:string):Promise<any>
+    fetchFavourites(studentId: string):Promise<any>
     
 }
 export default IcourseRepository

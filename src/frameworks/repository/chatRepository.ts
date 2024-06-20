@@ -138,7 +138,7 @@ class chatRepository implements IchatRepository {
             },
             {
                 $sort: {
-                    updationTime: -1,
+                    updatedAt: -1,
                 },
             },
         ]);
@@ -169,7 +169,7 @@ class chatRepository implements IchatRepository {
             },
             {
                 $sort: {
-                    updationTime: -1,
+                    updatedAt: -1,
                 },
             },
         ]);

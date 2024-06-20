@@ -466,6 +466,20 @@ class courseUseCase {
             }
         });
     }
+    getEnrolledCourseForPurchase(usersId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const EnrolledCourses = yield this.IcourseRepository.findEnrolledCoursesForPurchase(usersId);
+                if (EnrolledCourses) {
+                    return EnrolledCourses;
+                }
+                return null;
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
     SearchCourses(search, category, price) {
         return __awaiter(this, void 0, void 0, function* () {
             try {
@@ -490,6 +504,38 @@ class courseUseCase {
                 }
                 else {
                     return { response };
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    addToFavourite(studentId, courseId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const added = yield this.IcourseRepository.addToFavourite(studentId, courseId);
+                if (added) {
+                    return { status: true, message: "added to favourites", added, courseId };
+                }
+                else {
+                    return { status: false, message: "removed from favourites" };
+                }
+            }
+            catch (error) {
+                console.log(error);
+            }
+        });
+    }
+    fetchFavourites(studentId) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                const response = yield this.IcourseRepository.fetchFavourites(studentId);
+                if (response) {
+                    return { status: true, favourites: response };
+                }
+                else {
+                    return { status: false, favourites: null };
                 }
             }
             catch (error) {

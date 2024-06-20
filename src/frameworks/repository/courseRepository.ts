@@ -16,6 +16,8 @@ import { enrolledStudentsModel } from "../database/enrolledStudentsModel";
 import { userModel } from "../database/userModel";
 import { orderModel } from "../database/orderModel";
 import EnrolledStudents from "../../domain_entities/enrolledStudents";
+import { favouriteModel } from "../database/favouriteModel";
+import Favourites from "../../domain_entities/favourites";
 
 
 
@@ -521,7 +523,7 @@ async getTotalCounts() {
     async getTotalCountsTutor(instructorId:string) {
         try {
             const courses = await courseModel.find({ instructorId })
-            const courseIds = courses.map((course) => course._id);
+            const courseIds:any = courses.map((course) => course._id);
 
             const coursesResult = await courseModel.countDocuments({ instructorId });
 
@@ -573,6 +575,25 @@ async getTotalCounts() {
         }
 
     }
+    async findEnrolledCoursesForPurchase(usersId: string): Promise<any> {
+        try {
+            const enrolledCourses = await enrolledStudentsModel.find({ studentId: usersId})
+                .populate({
+                    path: 'studentId',
+                    model: userModel
+                })
+                .populate({
+                    path: 'courseId',
+                    model: courseModel
+                });
+            return enrolledCourses;
+        } catch (error) {
+            console.error('Error finding enrolled courses:', error);
+            throw error;
+        }
+
+    }
+    
     async UserDataforAnalysis(): Promise<boolean | any | null> {
         try {
             const last12Months: any[] = [];
@@ -805,6 +826,53 @@ async getTotalCounts() {
             if (completed) {
                 
                 return completed;
+            } else {
+                return null;
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async addToFavourite(studentId: string, courseId: string): Promise<boolean> {
+        try {
+            const favouriteFound = await favouriteModel.findOne({
+                studentId: studentId,
+            });
+            if (favouriteFound) {
+                if (favouriteFound.favourites.includes(courseId)) {
+                    await favouriteModel.updateOne(
+                        { studentId },
+                        { $pull: { favourites: courseId } }
+                    );
+                    return false
+                } else {
+                    await favouriteModel.updateOne(
+                        { studentId },
+                        { $push: { favourites: courseId } }
+                    );
+                }
+                return true
+            } else {
+
+                await favouriteModel.create({
+                    studentId,
+                    favourites: [courseId],
+                });
+                return true
+            }
+        } catch (error) {
+            throw error;
+        }
+    }
+
+    async fetchFavourites(studentId: string): Promise<Favourites | null> {
+        try {
+            console.log("whi studentid",studentId)
+            const favourites = await favouriteModel.findOne({ studentId: studentId }).populate('favourites').exec();
+            console.log("favourite",favourites)
+            if (favourites) {
+                return favourites;
             } else {
                 return null;
             }

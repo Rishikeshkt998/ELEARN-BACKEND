@@ -156,7 +156,7 @@ class chatRepository {
                 },
                 {
                     $sort: {
-                        updationTime: -1,
+                        updatedAt: -1,
                     },
                 },
             ]);
@@ -187,7 +187,7 @@ class chatRepository {
                 },
                 {
                     $sort: {
-                        updationTime: -1,
+                        updatedAt: -1,
                     },
                 },
             ]);
