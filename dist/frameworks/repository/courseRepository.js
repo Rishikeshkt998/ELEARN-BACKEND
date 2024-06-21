@@ -482,15 +482,30 @@ class courseRepository {
                 });
                 const tutorsResult = yield trainerModel_1.trainerModel.countDocuments({ _id: instructorId });
                 const salesResult = yield orderModel_1.orderModel.countDocuments({ courseId: { $in: courseIds } });
-                const totalAmountResult = yield orderModel_1.orderModel.aggregate([
+                const totalAmountResult = yield enrolledStudentsModel_1.enrolledStudentsModel.aggregate([
                     { $match: { courseId: { $in: courseIds } } },
-                    { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
+                    {
+                        $lookup: {
+                            from: 'course',
+                            localField: 'courseId',
+                            foreignField: '_id',
+                            as: 'courseDetails'
+                        }
+                    },
+                    { $unwind: '$courseDetails' },
+                    {
+                        $group: {
+                            _id: null,
+                            totalAmount: { $sum: '$courseDetails.price' }
+                        }
+                    }
                 ]);
+                const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+                console.log("total amount result", totalAmountResult);
                 const totalCourses = coursesResult;
                 const totalUsers = usersResult;
                 const totalTutors = tutorsResult;
                 const totalSales = salesResult;
-                const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
                 console.log(`Total number of courses: ${totalCourses}`);
                 console.log(`Total number of users: ${totalUsers}`);
                 console.log(`Total number of tutors: ${totalTutors}`);

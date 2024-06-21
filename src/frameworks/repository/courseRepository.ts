@@ -535,16 +535,33 @@ async getTotalCounts() {
 
             const salesResult = await orderModel.countDocuments({ courseId: { $in: courseIds } });
 
-            const totalAmountResult = await orderModel.aggregate([
+            const totalAmountResult = await enrolledStudentsModel.aggregate([
                 { $match: { courseId: { $in: courseIds } } },
-                { $group: { _id: null, totalAmount: { $sum: "$payment_info.amount" } } }
+                {
+                    $lookup: {
+                        from: 'course', 
+                        localField: 'courseId',
+                        foreignField: '_id',
+                        as: 'courseDetails'
+                    }
+                },
+                { $unwind: '$courseDetails' },
+                {
+                    $group: {
+                        _id: null,
+                        totalAmount: { $sum: '$courseDetails.price' } 
+                    }
+                }
             ]);
+
+            const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
+            
+            console.log("total amount result",totalAmountResult)
 
             const totalCourses = coursesResult;
             const totalUsers = usersResult;
             const totalTutors = tutorsResult;
             const totalSales = salesResult;
-            const totalAmount = totalAmountResult.length > 0 ? totalAmountResult[0].totalAmount : 0;
 
             console.log(`Total number of courses: ${totalCourses}`);
             console.log(`Total number of users: ${totalUsers}`);
