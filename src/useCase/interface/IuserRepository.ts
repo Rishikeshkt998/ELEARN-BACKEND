@@ -1,6 +1,5 @@
 import Course from '../../domain_entities/course'
 import User from '../../domain_entities/user'
-
 interface IuserRepository{
     findByEmail(email:string):Promise<any|null>
     findById(userId: string): Promise<User | null>
