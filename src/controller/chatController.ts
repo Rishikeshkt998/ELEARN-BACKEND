@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import chatUseCase from "../useCase/chatUseCase";
 class chatController {
+    
     private chatCase: chatUseCase
     constructor(chatCase: chatUseCase) {
         this.chatCase = chatCase
