@@ -15,9 +15,7 @@ dotenv.config()
 export const createServer=()=>{
     try{
         const app=express()
-        app.use(express.urlencoded({extended:true}))
-        app.use(bodyParser.json({ limit: '10mb' }));
-        app.use(cookieParser())
+        
         const corsOptions = {
             origin: process.env.ORIGIN || "*",
             credentials: true,
@@ -27,6 +25,9 @@ export const createServer=()=>{
         };
 
         app.use(cors(corsOptions));
+        app.use(express.urlencoded({extended:true}))
+        app.use(bodyParser.json({ limit: '10mb' }));
+        app.use(cookieParser())
         
         app.use('/api/user',userRouter)
         app.use('/api/admin',adminRouter)
