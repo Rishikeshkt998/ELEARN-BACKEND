@@ -20,10 +20,10 @@ jobs:
         echo "$DOCKER_PASSWORD" | docker login -u "$DOCKER_USERNAME" --password-stdin
 
     - name: Pull Docker image
-      run: sudo docker pull rishikt/elearn-backend:latest
+      run: docker pull rishikt/elearn-backend:latest
 
     - name: Delete Old docker container
-      run: sudo docker rm -f elearn-backend || true
+      run: docker rm -f elearn-backend || true
 
     - name: Run Docker Container
-      run: sudo docker run -d -p 8080:8080 --name elearn-backend rishikt/elearn-backend:latest
+      run: docker run -d -p 8080:5000 --name elearn-backend rishikt/elearn-backend:latest
