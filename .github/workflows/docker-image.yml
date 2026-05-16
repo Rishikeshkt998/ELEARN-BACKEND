@@ -35,6 +35,12 @@ jobs:
         CLOUD_NAME: ${{ secrets.CLOUD_NAME }}
         CLOUD_API_KEY: ${{ secrets.CLOUD_API_KEY }}
         CLOUD_API_SECRET: ${{ secrets.CLOUD_API_SECRET }}
+        AUTH_EMAIL: ${{ secrets.AUTH_EMAIL }}
+        AUTH_PASS: ${{ secrets.AUTH_PASS }}
+        APPID: ${{ secrets.APPID }}
+        SERVERSECRET: ${{ secrets.SERVERSECRET }}
+        PORT: ${{ vars.PORT }}
+        ORIGIN: ${{ vars.ORIGIN }}
       run: |
         echo "MONGO_CONNECTION_STRING=$MONGO_CONNECTION_STRING" > .env
         echo "REDIS_URL=$REDIS_URL" >> .env
@@ -45,8 +51,12 @@ jobs:
         echo "CLOUD_NAME=$CLOUD_NAME" >> .env
         echo "CLOUD_API_KEY=$CLOUD_API_KEY" >> .env
         echo "CLOUD_API_SECRET=$CLOUD_API_SECRET" >> .env
-        echo "PORT=5000" >> .env
-        echo "ORIGIN=*" >> .env
+        echo "AUTH_EMAIL=$AUTH_EMAIL" >> .env
+        echo "AUTH_PASS=$AUTH_PASS" >> .env
+        echo "APPID=$APPID" >> .env
+        echo "SERVERSECRET=$SERVERSECRET" >> .env
+        echo "PORT=$PORT" >> .env
+        echo "ORIGIN=$ORIGIN" >> .env
 
     - name: Build the Docker image
       run: docker build . -t rishikt/elearn-backend:latest
