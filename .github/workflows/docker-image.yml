@@ -19,6 +19,6 @@ jobs:
       run: docker login -u $DOCKER_USERNAME -p $DOCKER_PASSWORD
       
     - name: Build the Docker image
-      run: docker build -t elearn-backend .
+      run: docker build -t rishikt/elearn-backend:latest .
     - name: Push to Dockerhub
       run: docker push rishikt/elearn-backend:latest
