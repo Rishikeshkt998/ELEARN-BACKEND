@@ -29,11 +29,9 @@ WORKDIR /app
 COPY --from=builder /app/package.json ./
 COPY --from=builder /app/node_modules ./node_modules
 COPY --from=builder /app/dist ./dist
-# Copy .env that was created in the workflow step
-COPY --from=builder /app/.env .env
 
 # Expose the app port
 EXPOSE 5000
 
-# Start the server using the compiled JS file and native env loader
-CMD ["node", "--env-file=.env", "dist/server.js"]
+# Start the server using the compiled JS file
+CMD ["node", "dist/server.js"]

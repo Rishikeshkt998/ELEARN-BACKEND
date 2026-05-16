@@ -26,4 +26,4 @@ jobs:
       run: docker rm -f elearn-backend || true
 
     - name: Run Docker Container
-      run: docker run -d -p 8080:5000 --name elearn-backend rishikt/elearn-backend:latest
+      run: docker run -d -p 8080:8080 --name elearn-backend rishikt/elearn-backend:latest
