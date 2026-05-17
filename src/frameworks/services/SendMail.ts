@@ -2,22 +2,24 @@ import nodemailer from 'nodemailer'
 import InodeMailor from '../../useCase/interface/InodeMailor';
 import dotenv from "dotenv";
 
+dotenv.config();
 
-class sendMail{
-    private transporter:nodemailer.Transporter;
-    constructor(){
+class sendMail {
+    private transporter: nodemailer.Transporter;
+    constructor() {
         this.transporter = nodemailer.createTransport({
-            service: 'gmail',
+            host: 'smtp-relay.brevo.com',
+            port: 2525,
             auth: {
-                user:process.env.AUTH_EMAIL,
-                pass:process.env.AUTH_PASS 
-            },
-            authMethod: 'PLAIN'
-        })
+                user: process.env.AUTH_EMAIL,
+                pass: process.env.AUTH_PASS 
+            }
+        });
     }
-    SendMail(name:string,email:string,verificationotp:string):void{
-        const mailOptions:nodemailer.SendMailOptions= {
-            from: "rishikt690@gmail.com",
+    
+    SendMail(name: string, email: string, verificationotp: string): void {
+        const mailOptions: nodemailer.SendMailOptions = {
+            from: "rishikt8465@gmail.com",
             to: email,
             subject: 'Email verification',
             html: `Dear ${name},
@@ -31,11 +33,9 @@ class sendMail{
                 console.log('unknown error ');
             } else {
                 console.log('otp successfull');
-               
             }
         });
-
     }
 }
 
-export default sendMail
+export default sendMail;

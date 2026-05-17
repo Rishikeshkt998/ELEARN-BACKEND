@@ -16,8 +16,38 @@ export const createServer=()=>{
     try{
         const app=express()
         
+        const allowedOrigins = [
+            "http://localhost:5173",
+            "http://localhost:3000",
+            "http://localhost:5000",
+        ];
+
+        if (process.env.ORIGIN) {
+            const origins = process.env.ORIGIN.split(",").map(o => o.trim());
+            allowedOrigins.push(...origins);
+        }
+
         const corsOptions = {
-            origin: process.env.ORIGIN || "*",
+            origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+                if (!origin) return callback(null, true);
+                // Clean the origin string
+                const cleanOrigin = origin.replace(/\/$/, "");
+                
+                // Also support comparing without protocol in case they forgot https:// in their env config
+                const matches = allowedOrigins.some(allowed => {
+                    const cleanAllowed = allowed.trim().replace(/\/$/, "");
+                    return cleanOrigin === cleanAllowed || 
+                           cleanOrigin === `https://${cleanAllowed}` || 
+                           cleanOrigin === `http://${cleanAllowed}`;
+                });
+
+                if (matches) {
+                    callback(null, true);
+                } else {
+                    console.log("Blocked by CORS. Origin:", origin, "Allowed:", allowedOrigins);
+                    callback(new Error("Not allowed by CORS"));
+                }
+            },
             credentials: true,
             methods: "GET,HEAD,PUT,PATCH,POST,DELETE,OPTIONS",
             allowedHeaders: "Origin,X-Requested-With,Content-Type,Accept,Authorization,Course-Id",

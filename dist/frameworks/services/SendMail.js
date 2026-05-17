@@ -4,20 +4,22 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 };
 Object.defineProperty(exports, "__esModule", { value: true });
 const nodemailer_1 = __importDefault(require("nodemailer"));
+const dotenv_1 = __importDefault(require("dotenv"));
+dotenv_1.default.config();
 class sendMail {
     constructor() {
         this.transporter = nodemailer_1.default.createTransport({
-            service: 'gmail',
+            host: 'smtp-relay.brevo.com',
+            port: 2525,
             auth: {
                 user: process.env.AUTH_EMAIL,
                 pass: process.env.AUTH_PASS
-            },
-            authMethod: 'PLAIN'
+            }
         });
     }
     SendMail(name, email, verificationotp) {
         const mailOptions = {
-            from: "rishikt690@gmail.com",
+            from: "rishikt8465@gmail.com",
             to: email,
             subject: 'Email verification',
             html: `Dear ${name},

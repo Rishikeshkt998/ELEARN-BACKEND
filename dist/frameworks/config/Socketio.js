@@ -13,9 +13,34 @@ const socket_io_1 = require("socket.io");
 const messageModel_1 = require("../database/messageModel");
 const conversationModel_1 = require("../database/conversationModel");
 function socketServer(server) {
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:5000",
+    ];
+    if (process.env.ORIGIN) {
+        const origins = process.env.ORIGIN.split(",").map(o => o.trim());
+        allowedOrigins.push(...origins);
+    }
     const io = new socket_io_1.Server(server, {
         cors: {
-            origin: process.env.ORIGIN || "*",
+            origin: (origin, callback) => {
+                if (!origin)
+                    return callback(null, true);
+                const cleanOrigin = origin.replace(/\/$/, "");
+                const matches = allowedOrigins.some(allowed => {
+                    const cleanAllowed = allowed.trim().replace(/\/$/, "");
+                    return cleanOrigin === cleanAllowed ||
+                        cleanOrigin === `https://${cleanAllowed}` ||
+                        cleanOrigin === `http://${cleanAllowed}`;
+                });
+                if (matches) {
+                    callback(null, true);
+                }
+                else {
+                    callback(new Error("Not allowed by CORS"));
+                }
+            },
             methods: ['GET', 'POST']
         }
     });

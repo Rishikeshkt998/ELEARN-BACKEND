@@ -9,9 +9,34 @@ interface User {
 }
 
 function socketServer(server: any) {
+    const allowedOrigins = [
+        "http://localhost:5173",
+        "http://localhost:3000",
+        "http://localhost:5000",
+    ];
+
+    if (process.env.ORIGIN) {
+        const origins = process.env.ORIGIN.split(",").map(o => o.trim());
+        allowedOrigins.push(...origins);
+    }
+
     const io = new Server(server, {
         cors: {
-            origin:process.env.ORIGIN || "*",
+            origin: (origin: string | undefined, callback: (err: Error | null, allow?: boolean) => void) => {
+                if (!origin) return callback(null, true);
+                const cleanOrigin = origin.replace(/\/$/, "");
+                const matches = allowedOrigins.some(allowed => {
+                    const cleanAllowed = allowed.trim().replace(/\/$/, "");
+                    return cleanOrigin === cleanAllowed || 
+                           cleanOrigin === `https://${cleanAllowed}` || 
+                           cleanOrigin === `http://${cleanAllowed}`;
+                });
+                if (matches) {
+                    callback(null, true);
+                } else {
+                    callback(new Error("Not allowed by CORS"));
+                }
+            },
             methods: ['GET', 'POST']
         }
     });
